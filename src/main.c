@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "include/BMPLibrary.h"
 
 int main(int argc, char* argv[])
@@ -8,17 +9,19 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	bitmapInformationHeader informationHeader;
-	unsigned char** bitmapMatrix;
+	bitmapFileHeader BMPFileHeader;
+	bitmapInformationHeader BMPInformationHeader;
+	unsigned char* bitmapArray;
 
-	bitmapMatrix = getBitmapMatrixFromBMPFile(argv[1], &informationHeader);
+	readBMPFile(argv[1], &BMPFileHeader, &BMPInformationHeader);
 
-	if(bitmapMatrix != NULL)
+	bitmapArray = getBitmapArrayFromBMPFile(argv[1], &BMPFileHeader, &BMPInformationHeader);
+
+	if(bitmapArray == NULL)
 	{
-		printBMPInformationHeader(&informationHeader);
-		free(bitmapMatrix);
 		return 1;
 	}
 
-	return 0;
+	//Write bmp file test
+	writeBMPFile("$HOME/test.bmp", &BMPFileHeader, &BMPInformationHeader, bitmapArray);
 }

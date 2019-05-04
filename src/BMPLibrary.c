@@ -2,37 +2,19 @@
 #include <stdlib.h>
 #include "BMPLibrary.h"
 
-unsigned char** getBitmapMatrixFromBMPFile(char* filenameToLoad, bitmapInformationHeader* outInformationHeader)
+unsigned char** getBitmapMatrixFromBMPFile(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader)
 {
 	FILE* filePointer; 
-    bitmapFileHeader fileHeader; 
-    unsigned char *bitmapImageData;
+    unsigned char* bitmapImageData;
 
-    filePointer = fopen(filenameToLoad,"rb");
+    filePointer = fopen(BMPFile,"rb");
 
     if (filePointer == NULL)
     {
         return NULL;
     }
 
-    fread(&fileHeader, sizeof(bitmapFileHeader), 1, filePointer);
-
-    if(!isValidBMPHeader(&fileHeader))
-    {
-	   	fclose(filePointer);
-        return NULL;
-    }
-
-    fread(outInformationHeader, sizeof(bitmapInformationHeader), 1, filePointer);
-
-    if(outInformationHeader->bitmapHeight != outInformationHeader->bitmapWidth)
-    {
-        printf("Invalid image, it must be of equal height and width\n");
-        fclose(filePointer);
-        return NULL;
-    }
-
-    bitmapImageData = (unsigned char*) malloc(outInformationHeader->imageSize);
+    bitmapImageData = (unsigned char*) malloc(BMPInfoHeader->imageSize);
 
     if (bitmapImageData == NULL)
     {
@@ -41,8 +23,8 @@ unsigned char** getBitmapMatrixFromBMPFile(char* filenameToLoad, bitmapInformati
         return NULL;
     }
 
-    fseek(filePointer, fileHeader.offsetBitsFromHeaderToBitmap, SEEK_SET);
-    fread(bitmapImageData, outInformationHeader->imageSize, 1, filePointer);
+    fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
+    fread(bitmapImageData, BMPInfoHeader->imageSize, 1, filePointer);
 
     if (bitmapImageData == NULL)
     {
@@ -50,11 +32,11 @@ unsigned char** getBitmapMatrixFromBMPFile(char* filenameToLoad, bitmapInformati
         return NULL;
     }
 
-    swapBGRToRGB(bitmapImageData, outInformationHeader->imageSize);
+    swapBGRToRGB(bitmapImageData, BMPInfoHeader->imageSize);
 
     fclose(filePointer);
 
-    unsigned char** bitmapMatrixToReturn = getMatrixFromBitmapArray(bitmapImageData, outInformationHeader->bitmapHeight);
+    unsigned char** bitmapMatrixToReturn = getMatrixFromBitmapArray(bitmapImageData, BMPInfoHeader->bitmapHeight);
  
     free(bitmapImageData);
 
@@ -135,6 +117,74 @@ void swapBGRToRGB(unsigned char* imageBitmap, unsigned int imageSize)
     }
 }
 
+int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformationHeader* outInformationHeader)
+{
+    FILE* filePointer; 
+    filePointer = fopen(filename,"rb");
+
+    if (filePointer == NULL)
+    {
+        printf("Error opening file\n");
+        return -1;
+    }
+
+    fread(outFileHeader, sizeof(bitmapFileHeader), 1, filePointer);
+
+    if(!isValidBMPHeader(outFileHeader))
+    {
+        fclose(filePointer);
+        return -1;
+    }
+
+    fread(outInformationHeader, sizeof(bitmapInformationHeader), 1, filePointer);
+
+    if(outInformationHeader->bitmapHeight != outInformationHeader->bitmapWidth)
+    {
+        printf("Invalid image, it must be of equal height and width\n");
+        fclose(filePointer);
+        return -1;
+    }   
+
+    fclose(filePointer);
+    return 1;
+}
+
+int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* pixelArray)
+{
+    FILE* filePointer; 
+    filePointer = fopen(filePath,"wb");
+
+    if(filePointer == NULL)
+    {
+        printf("Error creating file\n");
+        return -1;
+    }
+
+    if(fwrite(fileHeader, sizeof(bitmapFileHeader), 1, filePointer) != 1)
+    {
+        printf("Error writing file header\n");
+        fclose(filePointer);
+        return -1;
+    }
+
+    if(fwrite(informationHeader, sizeof(bitmapInformationHeader), 1, filePointer) != 1)
+    {
+        printf("Error writing information header\n");
+        fclose(filePointer);
+        return -1;
+    }
+
+    if(fwrite(pixelArray, 1, informationHeader->imageSize, filePointer) != informationHeader->imageSize)
+    {
+        printf("Error writing bitmap array\n");
+        fclose(filePointer);
+        return -1;
+    }
+
+    fclose(filePointer);
+    return 1;
+}
+
 void printBMPFileHeader(bitmapFileHeader* fileHeaderToPrint)
 {
     printf("BMP file header \n");
@@ -159,4 +209,38 @@ void printBMPInformationHeader(bitmapInformationHeader* informationHeaderToPrint
     printf("Pixels per meter on Y axis -> %d \n", informationHeaderToPrint->pixelsPerMeterOnYAxis);
     printf("Number of color used -> %u \n", informationHeaderToPrint->numberOfColorsUsed);
     printf("Number of important colors -> %u \n", informationHeaderToPrint->numberOfImportantColors);
+}
+
+unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader)
+{
+    FILE* filePointer; 
+    unsigned char* bitmapImageData;
+
+    filePointer = fopen(BMPFile,"rb");
+
+    if (filePointer == NULL)
+    {
+        return NULL;
+    }
+
+    bitmapImageData = (unsigned char*) malloc(BMPInfoHeader->imageSize);
+
+    if (bitmapImageData == NULL)
+    {
+        free(bitmapImageData);
+        fclose(filePointer);
+        return NULL;
+    }
+
+    fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
+    fread(bitmapImageData, BMPInfoHeader->imageSize, 1, filePointer);
+
+    if (bitmapImageData == NULL)
+    {
+        fclose(filePointer);
+        return NULL;
+    }
+
+    fclose(filePointer); 
+    return bitmapImageData;
 }
