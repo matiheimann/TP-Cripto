@@ -17,6 +17,7 @@ void freeMatrix(int ** matrix, int n, int m);
 // Getters , Setters && Copys
 void copyMatrix (int ** matrixToCopy, int n, int m, int ** dest);
 void setIdentityMatrix(int ** matrix, int n);
+int getRangeOfMatrix(int ** matrix, int rows, int cols);
 
 // Equals
 bool areEqualMatrix(int ** matrix1, int n, int m, int ** matrix2);

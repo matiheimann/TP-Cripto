@@ -88,6 +88,28 @@ void setIdentityMatrix(int ** matrix, int n)
     }
 }
 
+int getRangeOfMatrix(int ** matrix, int rows, int cols)
+{
+    int ** auxMatrix = newMatrix(rows, cols);
+    copyMatrix(matrix, rows, cols, auxMatrix);
+
+    solve_matrix(auxMatrix, rows, cols);
+
+    int count = 0;
+
+    for (int i = 0; i < rows; i++)
+    {
+        if (auxMatrix[i][i] == 0)
+        {
+            freeMatrix(auxMatrix, rows, cols);
+            return count;
+        }
+        count++;
+    }
+    freeMatrix(auxMatrix, rows, cols);
+    return count;
+}
+
 /*            Equals                    */
 
 bool areEqualMatrix(int ** matrix1, int n, int m, int ** matrix2)
@@ -205,13 +227,13 @@ void getInvertibleMatrix (int ** matrix, int n, int m, int ** answer)
 }
 
 /*          Operacione Binarias         */
-void substract_matrix (int ** matrix1, int n1, int m1, int ** matrix2, int ** answer)
+void substract_matrix (int ** matrix1, int rows1, int cols1, int ** matrix2, int ** answer)
 {
-    for (int i=0; i < n1; i++)
+    for (int i=0; i < rows1; i++)
     {
-        for (int j = 0; j < m1; j++)
+        for (int j = 0; j < cols1; j++)
         {
-            answer[i][j] = resta_mod251(matrix1[i][j], matrix2[i][j]);
+            answer[i][j] = mod251(resta_mod251(matrix1[i][j], matrix2[i][j]));
         }
     }
 }
@@ -222,7 +244,7 @@ void add_matrix (int ** matrix1, int n1, int m1, int ** matrix2, int ** answer)
     {
         for (int j = 0; j < m1; j++)
         {
-            answer[i][j] = suma_mod251(matrix1[i][j],matrix2[i][j]);
+            answer[i][j] = mod251(suma_mod251(matrix1[i][j],matrix2[i][j]));
         }
     }
 }

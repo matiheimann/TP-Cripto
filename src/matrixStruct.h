@@ -29,6 +29,8 @@ void freeMatrixStr(MatrixStruct matrix);
 void setMatrix(MatrixStruct matrixStruct, int ** matrix, int rows, int cols);
 void setToEmptyMatrix(MatrixStruct matrix);
 int getAtPosition(MatrixStruct matrix, int row, int col);
+int getMatrixRange(MatrixStruct matrix);
+void setAtPosition(MatrixStruct matrix, int row, int col, int value);
 
 // Equals
 bool isEmptyMatrix(MatrixStruct matrix);
@@ -42,10 +44,14 @@ void printMatrixStruct(MatrixStruct matrixStruct);
 void transposeMatrixStruct(MatrixStruct matrixStruct, MatrixStruct answer);
 void getInvertibleMatrixStruct(MatrixStruct matrix, MatrixStruct answer);
 void addResultCol(MatrixStruct matrix, int * col);
+void proyectionMatrix(MatrixStruct matrix, MatrixStruct answer);
 
 // Binary MatrixxStruct Operations
 void multiplyMatrixStructs(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct answer);
 void addMatrix(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct answer);
+void substractMatrix(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct answer);
 
+// Matrix Solver
+int solveMatrixStruct(MatrixStruct matrix, int * answer);
 
 #endif //MATRICES_RESOLVER_MATRIXSTRC_H

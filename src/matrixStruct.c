@@ -128,6 +128,14 @@ void setAtPosition(MatrixStruct matrix, int row, int col, int value)
     return;
 }
 
+int getMatrixRange(MatrixStruct matrix)
+{
+    if (matrix == NULL || isEmptyMatrix(matrix))
+    {
+        return 0;
+    }
+    return getRangeOfMatrix(matrix->matrix, matrix->rows, matrix->cols);
+}
 /*
  *      Equals
  */
@@ -210,10 +218,11 @@ void printMatrixStruct(MatrixStruct matrixStruct)
 
 void transposeMatrixStruct(MatrixStruct matrixStruct, MatrixStruct answer)
 {
-
-    transpose_matrix(matrixStruct->matrix, matrixStruct->rows, matrixStruct->cols, answer->matrix);
     answer->cols = matrixStruct->rows;
     answer->rows = matrixStruct->cols;
+    answer->matrix = newMatrix(answer->rows, answer->cols);
+    transpose_matrix(matrixStruct->matrix, matrixStruct->rows, matrixStruct->cols, answer->matrix);
+
     return;
 }
 
@@ -249,6 +258,24 @@ void addResultCol(MatrixStruct matrix, int * col)
     matrix->matrix = newMatrix;
     matrix->cols = matrix->cols + 1;
 }
+
+void proyectionMatrix(MatrixStruct matrix, MatrixStruct answer)
+{
+    MatrixStruct matrixT    = newEmptyMatrixStruct();
+    MatrixStruct aux1       = newEmptyMatrixStruct();
+    MatrixStruct aux2       = newEmptyMatrixStruct();
+    MatrixStruct aux3       = newEmptyMatrixStruct();
+
+    transposeMatrixStruct(matrix, matrixT);
+    multiplyMatrixStructs(matrixT, matrix, aux1);
+    getInvertibleMatrixStruct(aux1, aux2);
+    multiplyMatrixStructs(matrix, aux2, aux3);
+    multiplyMatrixStructs(aux3, matrixT, answer);
+    freeMatrixStr(aux1);
+    freeMatrixStr(aux2);
+    freeMatrixStr(aux3);
+}
+
 
 /*
  *      Binary Matrix Struct Operation
@@ -293,10 +320,10 @@ void addMatrix(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct answer)
         return;
     }
     setToEmptyMatrix(answer);
-
-    add_matrix(matrix1->matrix, matrix1->rows, matrix1->cols, matrix2->matrix, answer->matrix);
     answer->cols = matrix1->cols;
     answer->rows = matrix1->rows;
+    answer->matrix = newMatrix(answer->rows, answer->cols);
+    add_matrix(matrix1->matrix, matrix1->rows, matrix1->cols, matrix2->matrix, answer->matrix);
     return;
 }
 
@@ -313,10 +340,10 @@ void substractMatrix(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct an
         return;
     }
     setToEmptyMatrix(answer);
-
-    substract_matrix(matrix1->matrix, matrix1->rows, matrix1->cols, matrix2->matrix, answer->matrix);
     answer->cols = matrix1->cols;
     answer->rows = matrix1->rows;
+    answer->matrix = newMatrix(answer->rows, answer->cols);
+    substract_matrix(matrix1->matrix, matrix1->rows, matrix1->cols, matrix2->matrix, answer->matrix);
     return;
 }
 
