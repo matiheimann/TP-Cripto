@@ -53,4 +53,7 @@ void matrixSolver (int ** matrix1, int n1, int m1, int * answer);
 void solve_matrix (int ** matrix, int n, int m);
 void getResult(int ** matrix, int n1, int m1, int * answer);
 
+int determinantOfMatrix(int** mat, int n);
+void getCofactor(int** mat, int** temp, int q, int n);
+
 #endif //MATRICES_RESOLVER_MATRIXLIBRARY_H

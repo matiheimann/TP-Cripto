@@ -361,3 +361,8 @@ int solveMatrixStruct(MatrixStruct matrix, int * answer)
     matrixSolver(matrix->matrix, matrix->rows, matrix->cols, answer);
     return matrix->cols - 1;
 }
+
+int getDeterminant(MatrixStruct matrix)
+{
+    return determinantOfMatrix(matrix->matrix, matrix->rows);
+}

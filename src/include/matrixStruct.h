@@ -55,4 +55,6 @@ void substractMatrix(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct an
 // Matrix Solver
 int solveMatrixStruct(MatrixStruct matrix, int * answer);
 
+int getDeterminant(MatrixStruct matrix);
+
 #endif //MATRICES_RESOLVER_MATRIXSTRC_H

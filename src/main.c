@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "include/BMPLibrary.h"
+#include "matrixStruct.h"
 
 int main(int argc, char* argv[])
 {
@@ -24,4 +25,5 @@ int main(int argc, char* argv[])
 
 	//Write bmp file test
 	writeBMPFile("$HOME/test.bmp", &BMPFileHeader, &BMPInformationHeader, bitmapArray);
+
 }
