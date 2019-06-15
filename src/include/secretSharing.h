@@ -12,7 +12,9 @@ void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMa
 
 MatrixList generateMatrixXList(int n, int k);
 
-MatrixStruct generateMatrixA(int n, int k);
+MatrixStruct generateMatrixA(MatrixStruct matrixS, int n, int k);
+
+int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k);
 
 MatrixStruct generateMatrixSdouble(MatrixStruct matrixA);
 

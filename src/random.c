@@ -1,6 +1,6 @@
 #include "random.h"
 
-int64_t seed;
+static int64_t seed;
 
 void setSeed(int64_t s)
 {

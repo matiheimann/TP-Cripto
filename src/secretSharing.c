@@ -5,6 +5,8 @@
 #include "include/secretSharing.h"
 #include "include/matrixStruct.h"
 #include "include/matrixList.h"
+#include "include/random.h"
+#include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -43,15 +45,80 @@ MatrixList generateMatrixXList(int n, int k) {
 }
 
 MatrixStruct generateMatrixR(MatrixStruct matrixS, MatrixStruct matrixSdouble) {
-    return NULL;
+    
+    MatrixStruct matrixR = newEmptyMatrixStruct();
+    substractMatrix(matrixS, matrixSdouble, matrixR);
+
+    return matrixR;
 }
 
 MatrixStruct generateMatrixSdouble(MatrixStruct matrixA) {
-    return NULL;
+
+    MatrixStruct matrixSdouble = newEmptyMatrixStruct();
+    proyectionMatrix(matrixA, matrixSdouble);
+
+    return matrixSdouble;
 }
 
-MatrixStruct generateMatrixA(int n, int k) {
-    return NULL;
+MatrixStruct generateMatrixA(MatrixStruct matrixS, int n, int k) {
+
+    MatrixStruct matrixA = newZeroMatrixStruct(n, k);
+    setSeed(clock());
+
+    do
+    {
+        for(int i=0; i<matrixA->rows; i++)
+        {
+            for(int j=0; j<matrixA->cols; j++)
+            {
+                int randRumber = nextChar();
+                while(randRumber > 251)
+                {
+                    randRumber = nextChar();
+                }
+
+                matrixA->matrix[i][j] = randRumber;
+            }
+        }
+    } while(!validateMatrixA(matrixA, matrixS, k));
+
+    return matrixA;
+}
+
+int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) {
+
+    if(getMatrixRange(matrixToValidate) != k)
+    {
+        return -1;
+    }
+
+    MatrixStruct transposeMatrix = newEmptyMatrixStruct();
+    MatrixStruct multiplicationResultMatrix = newEmptyMatrixStruct();
+
+    transposeMatrixStruct(matrixToValidate, transposeMatrix);
+    multiplyMatrixStructs(transposeMatrix, matrixToValidate, multiplicationResultMatrix);
+
+    if(getDeterminant(multiplicationResultMatrix) == 0)
+    {
+        return -1;
+    }
+
+    MatrixStruct proyectionMatrixToValidate = newEmptyMatrixStruct();
+    proyectionMatrix(matrixToValidate, proyectionMatrixToValidate);
+
+    MatrixStruct matrixRToValidate = newEmptyMatrixStruct();
+    substractMatrix(matrixS, proyectionMatrixToValidate, matrixRToValidate);
+
+    for(int i=0; i<matrixRToValidate->rows; i++)
+    {
+        for(int j=0; j<matrixRToValidate->cols; j++)
+        {
+            if(matrixRToValidate->matrix[i][j] > 251)
+                return -1;
+        }
+    }
+    
+    return 1;
 }
 
 void recoveryImageShare(MatrixList shadows, int n, int k, MatrixStruct watermark)

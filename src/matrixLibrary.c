@@ -411,7 +411,6 @@ void getResult(int ** matrix, int n1, int m1, int *answer)
     return;
 }
 
-
 void getCofactor(int** mat, int** temp, int q, int n)
 {
     int i = 0, j = 0;
@@ -436,7 +435,12 @@ int determinantOfMatrix(int** mat, int n)
     if (n == 1)
         return mat[0][0];
 
-    int** temp = calloc(n, n * sizeof(int));
+    int** temp = malloc(n * sizeof(int *));
+
+    for (int i = 0; i  < n; i++)
+    {
+        temp[i] = malloc(n * sizeof(int));
+    }
 
     int sign = 1;
 
