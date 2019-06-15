@@ -40,8 +40,26 @@ MatrixList generateMatrixVList(MatrixStruct matrixA, MatrixList matrixXlist) {
     return NULL;
 }
 
-MatrixList generateMatrixXList(int n, int k) {
-    return NULL;
+MatrixStruct generateMatrixX(int n, int k) {
+    MatrixStruct matrixX = newZeroMatrixStruct(k, n);
+    setSeed(clock());
+    char* selected = calloc(1, sizeof(bool) * 251);
+    for(int i = 0; i < n; i++){
+        int a = nextChar();
+        while(a > 251 || a == 0 || selected[a])
+        {
+            a = nextChar();
+        }
+
+        selected[a] = 1;
+        int lastValue = 1;
+        matrixX->matrix[0][i] = lastValue;
+        for(int j = 1; j < k; j++){
+            lastValue = ((lastValue % 251) * (a % 251)) % 251;
+            matrixX->matrix[j][i] = lastValue;
+        }
+    }
+    return matrixX;
 }
 
 MatrixStruct generateMatrixR(MatrixStruct matrixS, MatrixStruct matrixSdouble) {
@@ -64,7 +82,6 @@ MatrixStruct generateMatrixA(MatrixStruct matrixS, int n, int k) {
 
     MatrixStruct matrixA = newZeroMatrixStruct(n, k);
     setSeed(clock());
-
     do
     {
         for(int i=0; i<matrixA->rows; i++)

@@ -10,7 +10,7 @@
 
 void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMark);
 
-MatrixList generateMatrixXList(int n, int k);
+MatrixStruct generateMatrixX(int n, int k);
 
 MatrixStruct generateMatrixA(MatrixStruct matrixS, int n, int k);
 

@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "include/BMPLibrary.h"
 #include "matrixStruct.h"
+#include "random.h"
+#include <time.h>
 #include "include/matrixStruct.h"
 #include "include/secretSharing.h"
 
@@ -50,7 +52,9 @@ int main(int argc, char* argv[])
 	testMatrixS->matrix[3][3] = 7;
 
 	MatrixStruct testMatrixA;
-	testMatrixA = generateMatrixA(testMatrixS, testMatrixS->rows, 2);
+	testMatrixA = generateMatrixX(4, 2);
+
+
 
 	for(int i=0; i<testMatrixA->rows; i++)
 	{
