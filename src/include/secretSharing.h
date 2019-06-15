@@ -22,7 +22,7 @@ MatrixStruct generateMatrixR(MatrixStruct matrixS, MatrixStruct matrixSdouble);
 
 MatrixList generateMatrixsXList(int n, int k);
 
-MatrixList generateMatrixVList(MatrixStruct matrixA, MatrixList matrixXlist);
+MatrixStruct generateMatrixV(MatrixStruct matrixA, MatrixStruct matrixX);
 
 MatrixList generateMatrixListG(MatrixStruct matrixR, MatrixList matrixListV);
 

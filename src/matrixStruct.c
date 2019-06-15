@@ -366,3 +366,11 @@ int getDeterminant(MatrixStruct matrix)
 {
     return determinantOfMatrix(matrix->matrix, matrix->rows);
 }
+
+MatrixStruct copyColumn(MatrixStruct matrix, int col){
+    MatrixStruct ret = newZeroMatrixStruct(matrix->rows, 1);
+    for(int i = 0; i < matrix->rows; i++){
+        ret->matrix[i][0] = matrix->matrix[i][col];
+    }
+    return ret;
+}

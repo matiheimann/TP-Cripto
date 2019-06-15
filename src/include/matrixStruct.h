@@ -57,4 +57,6 @@ int solveMatrixStruct(MatrixStruct matrix, int * answer);
 
 int getDeterminant(MatrixStruct matrix);
 
+MatrixStruct copyColumn(MatrixStruct matrix, int col);
+
 #endif //MATRICES_RESOLVER_MATRIXSTRC_H

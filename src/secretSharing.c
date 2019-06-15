@@ -36,8 +36,17 @@ MatrixList generateMatrixListG(MatrixStruct matrixR, MatrixList matrixListV) {
 }
 
 
-MatrixList generateMatrixVList(MatrixStruct matrixA, MatrixList matrixXlist) {
-    return NULL;
+MatrixStruct generateMatrixV(MatrixStruct matrixA, MatrixStruct matrixX) {
+    MatrixStruct matrixV = newZeroMatrixStruct(matrixA->rows,matrixA->rows);
+    for(int i = 0; i < matrixX->cols; i++){
+        MatrixStruct aux = copyColumn(matrixX, i);
+        MatrixStruct ans = newZeroMatrixStruct(matrixA->rows,1);
+        multiplyMatrixStructs(matrixA, aux, ans);
+        for(int j = 0; ans->rows; j++){
+            matrixV->matrix[j][i] = ans->matrix[j][i];
+        }
+    }
+    return matrixV;
 }
 
 MatrixStruct generateMatrixX(int n, int k) {
