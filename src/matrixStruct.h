@@ -21,6 +21,7 @@ MatrixStruct newMatrixStruct(int ** matrix, int rows, int cols);
 MatrixStruct newEmptyMatrixStruct();
 MatrixStruct newIdentityMatrixStruct(int n);
 MatrixStruct newZeroMatrixStruct(int rows, int cols);
+MatrixStruct copyMatrixStruct(MatrixStruct toCopy);
 
 // Frees
 void freeMatrixStr(MatrixStruct matrix);

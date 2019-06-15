@@ -52,6 +52,12 @@ MatrixStruct newZeroMatrixStruct(int rows, int cols)
     ans->matrix = newMatrix(rows, cols);
 }
 
+MatrixStruct copyMatrixStruct(MatrixStruct toCopy)
+{
+    MatrixStruct copy = newMatrixStruct(toCopy->matrix, toCopy->rows, toCopy->cols);
+    return copy;
+}
+
 /*
  *      Frees
  */
