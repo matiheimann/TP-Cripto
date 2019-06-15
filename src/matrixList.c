@@ -2,7 +2,7 @@
 // Created by lococo on 14/06/19.
 //
 
-#include "matrixList.h"
+#include "include/matrixList.h"
 #include <stdlib.h>
 
 MatrixList newMatrixList()
@@ -27,7 +27,7 @@ void AddMatrix(MatrixList list, MatrixStruct matrix)
 
     list->last->next = toAdd;
     list->last = toAdd;
-    list->size = list->size++;
+    list->size += 1;
     return;
 }
 
@@ -75,5 +75,5 @@ MatrixStruct getMatrixAtPosition(MatrixList list,  int position)
         count++;
         aux = aux->next;
     }
-
+    return NULL;
 }

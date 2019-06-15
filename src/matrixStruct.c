@@ -4,9 +4,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "matrixStruct.h"
-#include "matrixLibrary.h"
-#include "libraryMod251.h"
+#include "include/matrixStruct.h"
+#include "include/matrixLibrary.h"
+#include "include/libraryMod251.h"
 
 
 /*
@@ -50,6 +50,7 @@ MatrixStruct newZeroMatrixStruct(int rows, int cols)
     ans->rows = rows;
     ans->cols = cols;
     ans->matrix = newMatrix(rows, cols);
+    return ans;
 }
 
 MatrixStruct copyMatrixStruct(MatrixStruct toCopy)
@@ -175,21 +176,15 @@ bool areEqualsMatrixStruct(MatrixStruct matrix1, MatrixStruct matrix2)
     {
         return false;
     }
-    if (matrix1->matrix == NULL)
+    if (matrix1->matrix == NULL && matrix2->matrix == NULL)
     {
-        if (matrix2->matrix == NULL)
-        {
-            return true;
-        }
+        return true;
     }
-    else
+    else if(matrix1->matrix == NULL || matrix2->matrix == NULL)
     {
-        if (matrix2->matrix == NULL)
-        {
-            return false;
-        }
-        return areEqualMatrix(matrix1->matrix, matrix1->rows, matrix1->cols, matrix2->matrix);
+        return false;
     }
+    return areEqualMatrix(matrix1->matrix, matrix1->rows, matrix1->cols, matrix2->matrix);
 }
 
 /*

@@ -4,8 +4,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "matrixLibrary.h"
-#include "libraryMod251.h"
+#include "include/matrixLibrary.h"
+#include "include/libraryMod251.h"
 
 
 /*          Creation of Matrix          */
@@ -362,7 +362,6 @@ void matrixSolver (int ** matrix, int n, int m, int * answer)
 
 void solve_matrix (int ** matrix, int n, int m)
 {
-    int j;
     for (int i = 0; i < n; i++)
     {
         if (i >= m)
@@ -398,7 +397,7 @@ void solve_matrix (int ** matrix, int n, int m)
         if (matrix[x][x] != 1)
         {
             int factor = matrix[x][x];
-            divideRow(matrix, n, m, x, matrix[x][x]);
+            divideRow(matrix, n, m, x, factor);
         }
     }
 }

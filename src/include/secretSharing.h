@@ -28,4 +28,15 @@ MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdo
 
 MatrixList generateMatrixListSh(MatrixList matrixListV, MatrixList matrixListG);
 
+MatrixStruct recoveryMatrixB(MatrixList shadows, int n, int k);
+
+MatrixList recoveryMatrixG(MatrixList shadows);
+
+MatrixStruct recoveryMatrixR(MatrixList matrixListG);
+
+MatrixStruct recoveryMatrixS(MatrixStruct matrixSdouble, MatrixStruct matrixR);
+
+bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matrixR, MatrixStruct matrixSdouble);
+
+
 #endif //MATRICES_RESOLVER_SECRETSHARING_H

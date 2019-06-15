@@ -2,32 +2,23 @@
 // Created by lococo on 14/06/19.
 //
 
-#include "secretSharing.h"
-#include "matrixStruct.h"
-#include "matrixList.h"
+#include "include/secretSharing.h"
+#include "include/matrixStruct.h"
+#include "include/matrixList.h"
 #include <stdbool.h>
 #include <stdlib.h>
 
-MatrixStruct recoveryMatrixB(MatrixList shadows, int n, int k);
-
-MatrixList recoveryMatrixG(MatrixList shadows);
-
-MatrixStruct recoveryMatrixR(MatrixList matrixListG);
-
-MatrixStruct recoveryMatrixS(MatrixStruct matrixSdouble, MatrixStruct matrixR);
-
-bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matrixR, MatrixStruct matrixSdouble);
-
 void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMark)
 {
-    MatrixStruct matrixA = generateMatrixA(n, k);
+    /*MatrixStruct matrixA = generateMatrixA(n, k);
     MatrixStruct matrixSdouble = generateMatrixSdouble(matrixA);
     MatrixStruct matrixR = generateMatrixR(matrixS, matrixSdouble);
     MatrixList matrixlistX = generateMatrixXList(n, k);
     MatrixList matrixlistV = generateMatrixVList(matrixA, matrixlistX);
     MatrixList matrixListG = generateMatrixListG(matrixR, matrixlistV);
     MatrixStruct matrixListRw = generateMatrixListRw(waterMark, matrixSdouble);
-    MatrixList matrixListSh = generateMatrixListSh(matrixlistV, matrixListG);
+    MatrixList matrixListSh = generateMatrixListSh(matrixlistV, matrixListG);*/
+    return;
 }
 
 MatrixList generateMatrixListSh(MatrixList matrixListV, MatrixList matrixListG) {
@@ -65,12 +56,13 @@ MatrixStruct generateMatrixA(int n, int k) {
 
 void recoveryImageShare(MatrixList shadows, int n, int k, MatrixStruct watermark)
 {
-    MatrixStruct matrixB = recoveryMatrixB(shadows, n, k);
+    /*MatrixStruct matrixB = recoveryMatrixB(shadows, n, k);
     MatrixStruct matrixSdouble = generateMatrixSdouble(matrixB);
     MatrixList matrixListG = recoveryMatrixG(shadows);
     MatrixStruct matrixR = recoveryMatrixR(matrixListG);
     MatrixStruct matrixS = recoveryMatrixS(matrixSdouble, matrixR);
-    bool verify = verifyImage(matrixS, watermark, matrixR, matrixSdouble);
+    bool verify = verifyImage(matrixS, watermark, matrixR, matrixSdouble);*/
+    return;
 
 }
 
