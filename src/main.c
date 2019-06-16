@@ -53,15 +53,6 @@ int main(int argc, char* argv[])
 
 	MatrixStruct* matrixes = generateMatrixListG(testMatrixS, 2);
 
-	for(int i = 0; i < 4; i++){
-	    for(int j = 0; j < matrixes[i]->rows; j++){
-	        for(int k = 0; k < matrixes[i]->cols; k++){
-	            printf("%d ", matrixes[i]->matrix[j][k]);
-	        }
-	        printf("\n");
-	    }
-	    printf("\n\n\n");
-	}
 
 	MatrixStruct testMatrixA = newZeroMatrixStruct(4, 2);
 
@@ -92,13 +83,15 @@ int main(int argc, char* argv[])
 
 	testMatrixV = generateMatrixV(testMatrixA, testMatrixX);
 
-	for(int i=0; i<testMatrixV->rows; i++)
-	{
-		for(int j=0; j<testMatrixV->cols; j++)
-		{
-			printf("%d ", testMatrixV->matrix[i][j]);
-		}
-
-		printf("\n");
+    MatrixStruct* ret = generateMatrixListSh(testMatrixV, matrixes);
+	for(int i=0; i<4; i++){
+	    for(int j =0 ; j < 4; j++){
+	        for(int k = 0; k < 3; k++){
+	            printf("%d ", ret[i]->matrix[j][k]);
+	        }
+	        printf("\n");
+	    }
+	    printf("\n\n\n");
 	}
+	printf("%d", ret[0]->matrix[0][0]);
 }

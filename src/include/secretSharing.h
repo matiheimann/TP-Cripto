@@ -28,7 +28,7 @@ MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k);
 
 MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdouble);
 
-MatrixList generateMatrixListSh(MatrixList matrixListV, MatrixList matrixListG);
+MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixListG);
 
 MatrixStruct recoveryMatrixB(MatrixList shadows, int n, int k);
 

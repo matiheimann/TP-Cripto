@@ -24,8 +24,25 @@ void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMa
     return;
 }
 
-MatrixList generateMatrixListSh(MatrixList matrixListV, MatrixList matrixListG) {
-    return NULL;
+MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixListG) {
+
+    int n = matrixListG[0]->rows;
+    int k = matrixListG[0]->cols;
+
+    MatrixStruct* ret = malloc(sizeof(MatrixStruct) * n);
+
+    for(int i = 0; i < n; i++){
+        ret[i] = newZeroMatrixStruct(n, k+1);
+        for(int j = 0; j < n; j++){
+            ret[i]->matrix[j][0] = matrixV->matrix[j][i];
+            for(int w = 0; w < k; w++){
+                ret[i]->matrix[j][w+1] = matrixListG[i]->matrix[j][w];
+            }
+        }
+    }
+
+    return ret;
+
 }
 
 MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdouble) {
