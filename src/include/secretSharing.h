@@ -24,7 +24,7 @@ MatrixList generateMatrixsXList(int n, int k);
 
 MatrixStruct generateMatrixV(MatrixStruct matrixA, MatrixStruct matrixX);
 
-MatrixList generateMatrixListG(MatrixStruct matrixR, MatrixList matrixListV);
+MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k);
 
 MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdouble);
 

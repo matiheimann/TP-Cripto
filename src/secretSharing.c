@@ -32,8 +32,25 @@ MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdo
     return NULL;
 }
 
-MatrixList generateMatrixListG(MatrixStruct matrixR, MatrixList matrixListV) {
-    return NULL;
+MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k) {
+    int n = matrixR->rows;
+    MatrixStruct* ret = malloc(sizeof(MatrixStruct) * n);
+    for(int i = 1; i <= n; i++){
+        ret[i] = newZeroMatrixStruct(n, k);
+        for(int j = 0; j < n; j++){
+            for(int w = 0; w < k; k++){
+                int g = 0;
+                for(int y = 0; y < n/k - 1; k++){
+                    g += matrixR->matrix[j][w * n/k + y];
+                    g = g%251;
+                }
+                g += matrixR->matrix[j][(w+1) * n/k - 1] * i;
+                g = g%251;
+                ret[i]->matrix[j][w] = g;
+            }
+        }
+    }
+    return ret;
 }
 
 
