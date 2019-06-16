@@ -34,22 +34,34 @@ int main(int argc, char* argv[])
 
 	MatrixStruct testMatrixS = newZeroMatrixStruct(4,4);
 
-	testMatrixS->matrix[0][0] = 2;
-	testMatrixS->matrix[0][1] = 5;
-	testMatrixS->matrix[0][2] = 2;
-	testMatrixS->matrix[0][3] = 3;
-	testMatrixS->matrix[1][0] = 3;
-	testMatrixS->matrix[1][1] = 6;
-	testMatrixS->matrix[1][2] = 4;
-	testMatrixS->matrix[1][3] = 5;
-	testMatrixS->matrix[2][0] = 4;
-	testMatrixS->matrix[2][1] = 7;
-	testMatrixS->matrix[2][2] = 4;
-	testMatrixS->matrix[2][3] = 6;
-	testMatrixS->matrix[3][0] = 1;
-	testMatrixS->matrix[3][1] = 4;
-	testMatrixS->matrix[3][2] = 1;
-	testMatrixS->matrix[3][3] = 7;
+	testMatrixS->matrix[0][0] = 1;
+	testMatrixS->matrix[0][1] = 35;
+	testMatrixS->matrix[0][2] = 52;
+	testMatrixS->matrix[0][3] = 40;
+	testMatrixS->matrix[1][0] = 33;
+	testMatrixS->matrix[1][1] = 68;
+	testMatrixS->matrix[1][2] = 69;
+	testMatrixS->matrix[1][3] = 240;
+	testMatrixS->matrix[2][0] = 54;
+	testMatrixS->matrix[2][1] = 72;
+	testMatrixS->matrix[2][2] = 212;
+	testMatrixS->matrix[2][3] = 181;
+	testMatrixS->matrix[3][0] = 38;
+	testMatrixS->matrix[3][1] = 239;
+	testMatrixS->matrix[3][2] = 176;
+	testMatrixS->matrix[3][3] = 238;
+
+	MatrixStruct* matrixes = generateMatrixListG(testMatrixS, 2);
+
+	for(int i = 0; i < 4; i++){
+	    for(int j = 0; j < matrixes[i]->rows; j++){
+	        for(int k = 0; k < matrixes[i]->cols; k++){
+	            printf("%d ", matrixes[i]->matrix[j][k]);
+	        }
+	        printf("\n");
+	    }
+	    printf("\n\n\n");
+	}
 
 	MatrixStruct testMatrixA = newZeroMatrixStruct(4, 2);
 

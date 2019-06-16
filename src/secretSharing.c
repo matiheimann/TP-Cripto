@@ -36,17 +36,17 @@ MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k) {
     int n = matrixR->rows;
     MatrixStruct* ret = malloc(sizeof(MatrixStruct) * n);
     for(int i = 1; i <= n; i++){
-        ret[i] = newZeroMatrixStruct(n, k);
+        ret[i-1] = newZeroMatrixStruct(n, k);
         for(int j = 0; j < n; j++){
-            for(int w = 0; w < k; k++){
+            for(int w = 0; w < k; w++){
                 int g = 0;
-                for(int y = 0; y < n/k - 1; k++){
+                for(int y = 0; y < n/k - 1; y++){
                     g += matrixR->matrix[j][w * n/k + y];
                     g = g%251;
                 }
                 g += matrixR->matrix[j][(w+1) * n/k - 1] * i;
                 g = g%251;
-                ret[i]->matrix[j][w] = g;
+                ret[i-1]->matrix[j][w] = g;
             }
         }
     }
