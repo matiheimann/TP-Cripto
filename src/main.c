@@ -51,16 +51,40 @@ int main(int argc, char* argv[])
 	testMatrixS->matrix[3][2] = 1;
 	testMatrixS->matrix[3][3] = 7;
 
-	MatrixStruct testMatrixA;
-	testMatrixA = generateMatrixX(4, 2);
+	MatrixStruct testMatrixA = newZeroMatrixStruct(4, 2);
 
+	testMatrixA->matrix[0][0] = 3;
+	testMatrixA->matrix[0][1] = 7;
+	testMatrixA->matrix[1][0] = 6;
+	testMatrixA->matrix[1][1] = 1;
+	testMatrixA->matrix[2][0] = 2;
+	testMatrixA->matrix[2][1] = 5;
+	testMatrixA->matrix[3][0] = 6;
+	testMatrixA->matrix[3][1] = 6;
 
+	MatrixStruct testMatrixX = newZeroMatrixStruct(2, 4);
 
-	for(int i=0; i<testMatrixA->rows; i++)
+	testMatrixX->matrix[0][0] = 9;
+	testMatrixX->matrix[1][0] = 5;
+
+	testMatrixX->matrix[0][1] = 4;
+	testMatrixX->matrix[1][1] = 4;
+
+	testMatrixX->matrix[0][2] = 9;
+	testMatrixX->matrix[1][2] = 8;
+
+	testMatrixX->matrix[0][3] = 3;
+	testMatrixX->matrix[1][3] = 2;
+
+	MatrixStruct testMatrixV = newZeroMatrixStruct(4,4);
+
+	testMatrixV = generateMatrixV(testMatrixA, testMatrixX);
+
+	for(int i=0; i<testMatrixV->rows; i++)
 	{
-		for(int j=0; j<testMatrixA->cols; j++)
+		for(int j=0; j<testMatrixV->cols; j++)
 		{
-			printf("%d ", testMatrixA->matrix[i][j]);
+			printf("%d ", testMatrixV->matrix[i][j]);
 		}
 
 		printf("\n");

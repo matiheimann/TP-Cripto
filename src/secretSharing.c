@@ -9,6 +9,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMark)
 {
@@ -42,8 +43,9 @@ MatrixStruct generateMatrixV(MatrixStruct matrixA, MatrixStruct matrixX) {
         MatrixStruct aux = copyColumn(matrixX, i);
         MatrixStruct ans = newZeroMatrixStruct(matrixA->rows,1);
         multiplyMatrixStructs(matrixA, aux, ans);
-        for(int j = 0; ans->rows; j++){
-            matrixV->matrix[j][i] = ans->matrix[j][i];
+
+        for(int j = 0; j<ans->rows; j++){
+            matrixV->matrix[j][i] = ans->matrix[j][0];
         }
     }
     return matrixV;
