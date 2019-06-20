@@ -5,12 +5,14 @@
 #include "include/secretDecription.h"
 #include <stdlib.h>
 
-MatrixStruct recoverMatrixS(MatrixStruct* matrixDoubleS, MatrixStruct matrixR)
+MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR)
 {
-    return NULL;
+    MatrixStruct matrixS = newEmptyMatrixStruct();
+    addMatrix(matrixDoubleS, matrixR, matrixS);
+    return matrixS;
 }
 
-MatrixStruct recoverMatrixW(MatrixStruct* matrixDoubleS, MatrixStruct matrixRw)
+MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw)
 {
     return NULL;
 }
@@ -27,7 +29,7 @@ MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size)
     for(int i = 0; i < size; i++){
         copyColumnToAnotherMatrix(matrixB, matrixSh[i], i, 1);
     }
-    
+
     proyectionMatrix(matrixB, matrixDoubleS);
 
     return matrixDoubleS;

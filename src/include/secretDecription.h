@@ -7,8 +7,8 @@
 
 #include "matrixStruct.h"
 
-MatrixStruct recoverMatrixS(MatrixStruct* matrixDoubleS, MatrixStruct matrixR);
-MatrixStruct recoverMatrixW(MatrixStruct* matrixDoubleS, MatrixStruct matrixRw);
+MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR);
+MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw);
 MatrixStruct recoverMatirxR(MatrixStruct* matrixG, MatrixStruct matrixSh);
 MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size);
 MatrixStruct recoverMatrixG(MatrixStruct matrixSh, MatrixStruct matrixV);
