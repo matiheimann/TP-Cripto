@@ -33,4 +33,5 @@ void freeMatrixList(MatrixList list);
 
 MatrixStruct getMatrixAtPosition(MatrixList list, int position);
 
+
 #endif //MATRICES_RESOLVER_MATRIXLIST_H

@@ -374,3 +374,17 @@ MatrixStruct copyColumn(MatrixStruct matrix, int col){
     }
     return ret;
 }
+
+void copyColumnToAnotherMatrix(MatrixStruct matrix1, MatrixStruct matrix2, int col1, int col2)
+{
+    for(int i = 0; i < matrix2->cols; i++){
+        matrix1->matrix[i][col1] = matrix2->matrix[i][col2];
+    }
+}
+
+MatrixStruct subMatrixWithoutModule(MatrixStruct m1, MatrixStruct m2)
+{
+    MatrixStruct result = newZeroMatrixStruct(m1->rows, m1->cols);
+    result->matrix = substractWithoutModule(m1->matrix, m2->matrix, m1->rows, m1->cols);
+    return result;
+}

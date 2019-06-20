@@ -30,14 +30,6 @@ MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdo
 
 MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixListG);
 
-MatrixStruct recoveryMatrixB(MatrixList shadows, int n, int k);
-
-MatrixList recoveryMatrixG(MatrixList shadows);
-
-MatrixStruct recoveryMatrixR(MatrixList matrixListG);
-
-MatrixStruct recoveryMatrixS(MatrixStruct matrixSdouble, MatrixStruct matrixR);
-
 bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matrixR, MatrixStruct matrixSdouble);
 
 

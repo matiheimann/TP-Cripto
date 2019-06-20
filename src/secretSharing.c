@@ -1,7 +1,3 @@
-//
-// Created by lococo on 14/06/19.
-//
-
 #include "include/secretSharing.h"
 #include "include/matrixStruct.h"
 #include "include/matrixList.h"
@@ -151,7 +147,7 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
 
     if(getMatrixRange(matrixToValidate) != k)
     {
-        return -1;
+        return 0;
     }
 
     MatrixStruct transposeMatrix = newEmptyMatrixStruct();
@@ -162,21 +158,21 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
 
     if(getDeterminant(multiplicationResultMatrix) == 0)
     {
-        return -1;
+        return 0;
     }
 
     MatrixStruct proyectionMatrixToValidate = newEmptyMatrixStruct();
     proyectionMatrix(matrixToValidate, proyectionMatrixToValidate);
 
     MatrixStruct matrixRToValidate = newEmptyMatrixStruct();
-    substractMatrix(matrixS, proyectionMatrixToValidate, matrixRToValidate);
+    matrixRToValidate = subMatrixWithoutModule(matrixS, proyectionMatrixToValidate);
 
     for(int i=0; i<matrixRToValidate->rows; i++)
     {
         for(int j=0; j<matrixRToValidate->cols; j++)
         {
-            if(matrixRToValidate->matrix[i][j] > 251)
-                return -1;
+            if(matrixRToValidate->matrix[i][j] > 250 || matrixRToValidate->matrix[i][j] < 0)
+                return 0;
         }
     }
     
@@ -193,24 +189,4 @@ void recoveryImageShare(MatrixList shadows, int n, int k, MatrixStruct watermark
     bool verify = verifyImage(matrixS, watermark, matrixR, matrixSdouble);*/
     return;
 
-}
-
-bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matrixR, MatrixStruct matrixSdouble) {
-    return 0;
-}
-
-MatrixStruct recoveryMatrixS(MatrixStruct matrixSdouble, MatrixStruct matrixR) {
-    return NULL;
-}
-
-MatrixStruct recoveryMatrixR(MatrixList matrixListG) {
-    return NULL;
-}
-
-MatrixList recoveryMatrixG(MatrixList shadows) {
-    return NULL;
-}
-
-MatrixStruct recoveryMatrixB(MatrixList shadows, int n, int k) {
-    return NULL;
 }
