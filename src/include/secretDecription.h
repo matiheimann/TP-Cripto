@@ -9,9 +9,9 @@
 
 MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR);
 MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw);
-MatrixStruct recoverMatirxR(MatrixStruct* matrixG, MatrixStruct matrixSh);
+MatrixStruct recoverMatrixR(MatrixStruct* matrixG);
 MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size);
-MatrixStruct recoverMatrixG(MatrixStruct matrixSh, MatrixStruct matrixV);
+MatrixStruct recoverMatrixG(MatrixStruct matrixSh);
 
 
 #endif //TP_CRIPTO_SECRETDECRIPTION_H

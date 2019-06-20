@@ -14,10 +14,12 @@ MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR)
 
 MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw)
 {
-    return NULL;
+    MatrixStruct matrixW = newEmptyMatrixStruct();
+    addMatrix(matrixDoubleS, matrixRw, matrixW);
+    return matrixW;
 }
 
-MatrixStruct recoverMatirxR(MatrixStruct* matrixG, MatrixStruct matrixSh)
+MatrixStruct recoverMatrixR(MatrixStruct* matrixG)
 {
     return NULL;
 }
@@ -35,6 +37,12 @@ MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size)
     return matrixDoubleS;
 }
 
-MatrixStruct recoverMatrixG(MatrixStruct matrixSh, MatrixStruct matrixV){
-    return NULL;
+MatrixStruct recoverMatrixG(MatrixStruct matrixSh){
+
+    MatrixStruct matrixG = newZeroMatrixStruct(matrixSh->rows, matrixSh->cols - 1);
+    for(int i = 0; i < matrixG->cols; i++)
+    {
+        copyColumnToAnotherMatrix(matrixG, matrixSh, i, i+1);
+    }
+    return matrixG;
 }
