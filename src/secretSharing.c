@@ -179,8 +179,10 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
     {
         for(int j=0; j<matrixRToValidate->cols; j++)
         {
-            if(matrixRToValidate->matrix[i][j] > 250 || matrixRToValidate->matrix[i][j] < 0)
+            if(matrixRToValidate->matrix[i][j] % 256 > 250) {
                 return 0;
+            }
+            matrixRToValidate->matrix[i][j] = matrixRToValidate->matrix[i][j] % 256;
         }
     }
     
