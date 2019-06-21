@@ -390,3 +390,10 @@ MatrixStruct subMatrixWithoutModule(MatrixStruct m1, MatrixStruct m2)
     result->matrix = substractWithoutModule(m1->matrix, m2->matrix, m1->rows, m1->cols);
     return result;
 }
+
+MatrixStruct sumMatrixWithoutModule(MatrixStruct m1, MatrixStruct m2)
+{
+    MatrixStruct result = newZeroMatrixStruct(m1->rows, m1->cols);
+    result->matrix = addMatrixWithoutModule(m1->matrix, m2->matrix, m1->rows, m1->cols);
+    return result;
+}

@@ -52,6 +52,7 @@ void getResult(int ** matrix, int n1, int m1, int * answer);
 int determinantOfMatrix(int** mat, int n);
 void getCofactor(int** mat, int** temp, int q, int n);
 int** substractWithoutModule(int** m1, int** m2, int rows, int cols);
+int** addMatrixWithoutModule(int** m1, int** m2, int rows, int cols);
 
 
 #endif //MATRICES_RESOLVER_MATRIXLIBRARY_H

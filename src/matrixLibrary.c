@@ -465,3 +465,20 @@ int** substractWithoutModule(int** m1, int** m2, int rows, int cols)
     }
     return result;
 }
+
+int** addMatrixWithoutModule(int** m1, int** m2, int rows, int cols)
+{
+    int** result = malloc(sizeof(int*) * rows);
+    for(int i = 0; i < rows; i++)
+    {
+        result[i] = malloc(sizeof(int) * cols);
+    }
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            result[i][j] = m1[i][j] + m2[i][j];
+        }
+    }
+    return result;
+}

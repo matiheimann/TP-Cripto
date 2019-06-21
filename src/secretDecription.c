@@ -14,8 +14,7 @@ MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR)
 
 MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw)
 {
-    MatrixStruct matrixW = newEmptyMatrixStruct();
-    addMatrix(matrixDoubleS, matrixRw, matrixW);
+    MatrixStruct matrixW = sumMatrixWithoutModule(matrixDoubleS, matrixRw);
     return matrixW;
 }
 

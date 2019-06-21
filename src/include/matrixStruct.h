@@ -56,5 +56,6 @@ int getDeterminant(MatrixStruct matrix);
 MatrixStruct copyColumn(MatrixStruct matrix, int col);
 void copyColumnToAnotherMatrix(MatrixStruct matrix1, MatrixStruct matrix2, int col1, int col2);
 MatrixStruct subMatrixWithoutModule(MatrixStruct m1, MatrixStruct m2);
+MatrixStruct sumMatrixWithoutModule(MatrixStruct m1, MatrixStruct m2);
 
 #endif //MATRICES_RESOLVER_MATRIXSTRC_H
