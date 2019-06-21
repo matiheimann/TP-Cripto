@@ -275,6 +275,7 @@ void proyectionMatrix(MatrixStruct matrix, MatrixStruct answer)
     freeMatrixStr(aux1);
     freeMatrixStr(aux2);
     freeMatrixStr(aux3);
+    freeMatrixStr(matrixT);
 }
 
 
