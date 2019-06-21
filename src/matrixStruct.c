@@ -275,6 +275,7 @@ void proyectionMatrix(MatrixStruct matrix, MatrixStruct answer)
     freeMatrixStr(aux1);
     freeMatrixStr(aux2);
     freeMatrixStr(aux3);
+    freeMatrixStr(matrixT);
 }
 
 
@@ -397,3 +398,4 @@ MatrixStruct sumMatrixWithoutModule(MatrixStruct m1, MatrixStruct m2)
     result->matrix = addMatrixWithoutModule(m1->matrix, m2->matrix, m1->rows, m1->cols);
     return result;
 }
+
