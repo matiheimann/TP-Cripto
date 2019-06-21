@@ -108,11 +108,11 @@ int getRangeOfMatrix(int ** matrix, int rows, int cols)
 
 /*            Equals                    */
 
-bool areEqualMatrix(int ** matrix1, int n, int m, int ** matrix2)
+bool areEqualMatrix(int ** matrix1, int rows, int cols, int ** matrix2)
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < cols; j++)
         {
             if (matrix1[i][j] != matrix2[i][j])
             {
@@ -123,17 +123,17 @@ bool areEqualMatrix(int ** matrix1, int n, int m, int ** matrix2)
     return true;
 }
 
-bool areResultOfMatrix(int ** matrix, int n, int m, int * answer)
+bool areResultOfMatrix(int ** matrix, int rows, int cols, int * answer)
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rows; i++)
     {
         int sum = 0;
-        for (int j = 0; j < m - 1; j++)
+        for (int j = 0; j < cols - 1; j++)
         {
             sum =  suma_mod251(sum, producto_mod251(matrix[i][j], answer[j]));
         }
         sum = mod251(sum);
-        int verify = mod251(matrix[i][m - 1]);
+        int verify = mod251(matrix[i][cols - 1]);
         if (sum != verify)
         {
             return false;
@@ -144,24 +144,24 @@ bool areResultOfMatrix(int ** matrix, int n, int m, int * answer)
 
 /*              Prints                  */
 
-void printMatrixWithResults(int ** matrix, int n, int m)
+void printMatrixWithResults(int ** matrix, int rows, int cols)
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < m - 1; j++)
+        for (int j = 0; j < cols - 1; j++)
         {
             printf("%d ", matrix[i][j]);
         }
-        printf("= %d \n", matrix[i][m - 1]);
+        printf("= %d \n", matrix[i][cols - 1]);
     }
     printf("\n");
 }
 
-void printMatrix(int ** matrix, int n, int m)
+void printMatrix(int ** matrix, int rows, int cols)
 {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < m ; j++)
+        for (int j = 0; j < cols ; j++)
         {
             printf("%d ", matrix[i][j]);
         }
@@ -181,29 +181,29 @@ void printVector(int * vector, int n)
 
 /*          Operaciones Unarias         */
 
-void productoEscalar(int ** matrix, int n, int m, int num, int ** answer)
+void productoEscalar(int ** matrix, int rows, int cols, int num, int ** answer)
 {
-    for (int i = 0; i < n ; i++)
+    for (int i = 0; i < rows ; i++)
     {
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < cols; j++)
         {
             answer[i][j] = producto_mod251(matrix[i][j], num);
         }
     }
 }
 
-void getInvertibleMatrix (int ** matrix, int n, int m, int ** answer)
+void getInvertibleMatrix (int ** matrix, int rows, int m, int ** answer)
 {
-    int ** auxMatrix = newMatrix(n, n * 2);
-    for (int i = 0; i < n; i++)
+    int ** auxMatrix = newMatrix(rows, rows * 2);
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < n*2; j++)
+        for (int j = 0; j < rows * 2; j++)
         {
-            if (j < n)
+            if (j < rows)
             {
                 auxMatrix[i][j] = matrix[i][j];
             }
-            else if (j - n == i)
+            else if (j - rows == i)
             {
                 auxMatrix[i][j] = 1;
             } else {
@@ -211,15 +211,15 @@ void getInvertibleMatrix (int ** matrix, int n, int m, int ** answer)
             }
         }
     }
-    solve_matrix(auxMatrix, n, n*2);
-    for (int i = 0; i < n; i++)
+    solve_matrix(auxMatrix, rows, rows * 2);
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = n; j < n * 2 ;j++)
+        for (int j = rows; j < rows * 2 ;j++)
         {
-            answer[i][j - n] = auxMatrix[i][j];
+            answer[i][j - rows] = auxMatrix[i][j];
         }
     }
-    freeMatrix(auxMatrix, n, n*2);
+    freeMatrix(auxMatrix, rows, rows * 2);
 }
 
 /*          Operacione Binarias         */
@@ -351,7 +351,7 @@ void matrixSolver (int ** matrix, int n, int m, int * answer)
     int ** auxMatrix = newMatrix(n, m);
     copyMatrix(matrix, n, m, auxMatrix);
     solve_matrix(auxMatrix, n, m);
-    getResult(matrix, n, m, answer);
+    getResult(auxMatrix, n, m, answer);
     freeMatrix(auxMatrix, n, m);
     return;
 }
