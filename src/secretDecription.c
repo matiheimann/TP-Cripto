@@ -19,9 +19,41 @@ MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw)
     return matrixW;
 }
 
-MatrixStruct recoverMatrixR(MatrixStruct* matrixG)
+MatrixStruct recoverMatrixR(MatrixStruct* matrixG, int* shadowNumber, int size)
 {
-    return NULL;
+    MatrixStruct matrixAux = newZeroMatrixStruct(size, matrixG[0]->rows + 1);
+    MatrixStruct matrixR = newZeroMatrixStruct(matrixG[0]->rows, matrixG[0]->rows);
+    for(int i = 0; i < matrixG[0]->rows; i++)
+    {
+        for(int j = 0; j < size; j++)
+        {
+            matrixAux->matrix[i][j] = (j == size - 1) ? shadowNumber[i] : 1;
+        }
+    }
+    for(int i = 0; i < matrixG[0]->rows; i++)
+    {
+        for(int j = 0; j < matrixG[0]->cols; j++)
+        {
+            for(int k = 0; k < size; k++)
+            {
+                matrixAux->matrix[k][matrixG[0]->rows] = matrixG[k]->matrix[i][j];
+            }
+            int val = matrixG[0]->rows/matrixG[0]->cols;
+            int* ans = malloc(sizeof(int) * val);
+            if(solveMatrixStruct(matrixAux, ans))
+            {
+                for(int k = 0; k < val; k++)
+                {
+                    matrixR->matrix[i][j * val + k] = ans[k];
+                }
+            }
+            else
+            {
+                return NULL;
+            }
+        }
+    }
+    return matrixR;
 }
 
 MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size)
@@ -37,7 +69,8 @@ MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size)
     return matrixDoubleS;
 }
 
-MatrixStruct recoverMatrixG(MatrixStruct matrixSh){
+MatrixStruct recoverMatrixG(MatrixStruct matrixSh)
+{
 
     MatrixStruct matrixG = newZeroMatrixStruct(matrixSh->rows, matrixSh->cols - 1);
     for(int i = 0; i < matrixG->cols; i++)

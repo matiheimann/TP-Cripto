@@ -354,12 +354,14 @@ void substractMatrix(MatrixStruct matrix1, MatrixStruct matrix2, MatrixStruct an
 
 int solveMatrixStruct(MatrixStruct matrix, int * answer)
 {
-    if (matrix->matrix == NULL)
+    if (matrix->matrix == NULL || matrix->rows + 1 < matrix->cols)
     {
-        return -1;
+        return 0;
     }
+
     matrixSolver(matrix->matrix, matrix->rows, matrix->cols, answer);
-    return matrix->cols - 1;
+
+    return 1;
 }
 
 int getDeterminant(MatrixStruct matrix)

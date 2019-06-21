@@ -1,7 +1,3 @@
-//
-// Created by lococo on 07/06/19.
-//
-
 #ifndef MATRICES_RESOLVER_MATRIXLIBRARY_H
 #define MATRICES_RESOLVER_MATRIXLIBRARY_H
 

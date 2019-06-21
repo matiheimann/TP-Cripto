@@ -1,7 +1,3 @@
-//
-// Created by lococo on 07/06/19.
-//
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "include/matrixLibrary.h"
@@ -354,7 +350,7 @@ void matrixSolver (int ** matrix, int n, int m, int * answer)
 {
     int ** auxMatrix = newMatrix(n, m);
     copyMatrix(matrix, n, m, auxMatrix);
-    solve_matrix(matrix, n, m);
+    solve_matrix(auxMatrix, n, m);
     getResult(matrix, n, m, answer);
     freeMatrix(auxMatrix, n, m);
     return;

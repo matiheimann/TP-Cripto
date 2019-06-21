@@ -9,7 +9,7 @@
 
 MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR);
 MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw);
-MatrixStruct recoverMatrixR(MatrixStruct* matrixG);
+MatrixStruct recoverMatrixR(MatrixStruct* matrixG, int* shadowNumber, int size);
 MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size);
 MatrixStruct recoverMatrixG(MatrixStruct matrixSh);
 
