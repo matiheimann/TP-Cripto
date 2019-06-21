@@ -1,7 +1,3 @@
-//
-// Created by lococo on 14/06/19.
-//
-
 #ifndef MATRICES_RESOLVER_SECRETSHARING_H
 #define MATRICES_RESOLVER_SECRETSHARING_H
 

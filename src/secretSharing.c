@@ -179,14 +179,3 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
     return 1;
 }
 
-void recoveryImageShare(MatrixList shadows, int n, int k, MatrixStruct watermark)
-{
-    /*MatrixStruct matrixB = recoveryMatrixB(shadows, n, k);
-    MatrixStruct matrixSdouble = generateMatrixSdouble(matrixB);
-    MatrixList matrixListG = recoveryMatrixG(shadows);
-    MatrixStruct matrixR = recoveryMatrixR(matrixListG);
-    MatrixStruct matrixS = recoveryMatrixS(matrixSdouble, matrixR);
-    bool verify = verifyImage(matrixS, watermark, matrixR, matrixSdouble);*/
-    return;
-
-}

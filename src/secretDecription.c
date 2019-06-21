@@ -79,3 +79,18 @@ MatrixStruct recoverMatrixG(MatrixStruct matrixSh)
     }
     return matrixG;
 }
+
+MatrixStruct* recoveryAlgorithm(MatrixStruct* matrixSh, MatrixStruct matrixRw, int* shadowNumber, int size)
+{
+    MatrixStruct* result = malloc(sizeof(MatrixStruct) * 2);
+    MatrixStruct matrixDoubleS = recoverMatrixDoubleS(matrixSh, size);
+    MatrixStruct* matrixG = malloc(sizeof(MatrixStruct) * size);
+    for(int i = 0; i < size; i++)
+    {
+        matrixG[i] = recoverMatrixG(matrixSh[i]);
+    }
+    MatrixStruct matrixR = recoverMatrixR(matrixG, shadowNumber, size);
+    result[0] = recoverMatrixS(matrixDoubleS, matrixR);
+    result[1] = recoverMatrixW(matrixDoubleS, matrixRw);
+    return result;
+}
