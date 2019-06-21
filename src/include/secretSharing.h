@@ -4,7 +4,7 @@
 #include "matrixStruct.h"
 #include "matrixList.h"
 
-void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMark);
+MatrixStruct* constructImageShare(MatrixStruct matrixS, int k, MatrixStruct matrixW);
 
 MatrixStruct generateMatrixX(int n, int k);
 
@@ -16,13 +16,11 @@ MatrixStruct generateMatrixSdouble(MatrixStruct matrixA);
 
 MatrixStruct generateMatrixR(MatrixStruct matrixS, MatrixStruct matrixSdouble);
 
-MatrixList generateMatrixsXList(int n, int k);
-
 MatrixStruct generateMatrixV(MatrixStruct matrixA, MatrixStruct matrixX);
 
 MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k);
 
-MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdouble);
+MatrixStruct generateMatrixListRw(MatrixStruct matrixW, MatrixStruct matrixSdouble);
 
 MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixListG);
 

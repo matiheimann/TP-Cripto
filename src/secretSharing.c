@@ -7,17 +7,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void costructImageShare(MatrixStruct matrixS, int n, int k, MatrixStruct waterMark)
+MatrixStruct* costructImageShare(MatrixStruct matrixS, int k, MatrixStruct matrixW)
 {
-    /*MatrixStruct matrixA = generateMatrixA(n, k);
+    MatrixStruct* result = malloc(sizeof(MatrixStruct*) * (matrixS->rows + 1));
+    MatrixStruct matrixA = generateMatrixA(matrixS, matrixS->rows, k);
     MatrixStruct matrixSdouble = generateMatrixSdouble(matrixA);
     MatrixStruct matrixR = generateMatrixR(matrixS, matrixSdouble);
-    MatrixList matrixlistX = generateMatrixXList(n, k);
-    MatrixList matrixlistV = generateMatrixVList(matrixA, matrixlistX);
-    MatrixList matrixListG = generateMatrixListG(matrixR, matrixlistV);
-    MatrixStruct matrixListRw = generateMatrixListRw(waterMark, matrixSdouble);
-    MatrixList matrixListSh = generateMatrixListSh(matrixlistV, matrixListG);*/
-    return;
+    MatrixStruct matrixlistX = generateMatrixX(matrixS->rows, k);
+    MatrixStruct matrixlistV = generateMatrixV(matrixA, matrixlistX);
+    MatrixStruct* matrixListG = generateMatrixListG(matrixR, k);
+    MatrixStruct matrixRw = generateMatrixListRw(matrixW, matrixSdouble);
+    MatrixStruct* matrixListSh = generateMatrixListSh(matrixlistV, matrixListG);
+    for(int i = 0; i < matrixS->rows; i++)
+    {
+        result[i] = matrixListSh[i];
+    }
+    result[matrixS->rows] = matrixRw;
+    return result;
 }
 
 MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixListG) {
@@ -41,8 +47,10 @@ MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixLis
 
 }
 
-MatrixStruct generateMatrixListRw(MatrixStruct waterMark, MatrixStruct matrixSdouble) {
-    return NULL;
+MatrixStruct generateMatrixListRw(MatrixStruct matrixW, MatrixStruct matrixSdouble) {
+    MatrixStruct matrixRw = newEmptyMatrixStruct();
+    substractMatrix(matrixW, matrixSdouble, matrixRw);
+    return matrixRw;
 }
 
 MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k) {
