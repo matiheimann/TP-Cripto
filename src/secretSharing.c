@@ -85,6 +85,8 @@ MatrixStruct generateMatrixV(MatrixStruct matrixA, MatrixStruct matrixX) {
         for(int j = 0; j<ans->rows; j++){
             matrixV->matrix[j][i] = ans->matrix[j][0];
         }
+        freeMatrixStr(aux);
+        freeMatrixStr(ans);
     }
     return matrixV;
 }
@@ -112,7 +114,7 @@ MatrixStruct generateMatrixX(int n, int k) {
 }
 
 MatrixStruct generateMatrixR(MatrixStruct matrixS, MatrixStruct matrixSdouble) {
-    
+
     MatrixStruct matrixR = newEmptyMatrixStruct();
     substractMatrix(matrixS, matrixSdouble, matrixR);
 
@@ -185,7 +187,7 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
             matrixRToValidate->matrix[i][j] = matrixRToValidate->matrix[i][j] % 256;
         }
     }
-    
+
     return 1;
 }
 

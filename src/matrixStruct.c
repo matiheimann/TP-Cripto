@@ -65,7 +65,10 @@ MatrixStruct copyMatrixStruct(MatrixStruct toCopy)
 
 void freeMatrixStr(MatrixStruct matrix)
 {
-    freeMatrix(matrix->matrix, matrix->rows, matrix->cols);
+    if (matrix->matrix != NULL)
+    {
+        freeMatrix(matrix->matrix, matrix->rows, matrix->cols);
+    }
     free(matrix);
 }
 
@@ -372,7 +375,8 @@ int getDeterminant(MatrixStruct matrix)
 
 MatrixStruct copyColumn(MatrixStruct matrix, int col){
     MatrixStruct ret = newZeroMatrixStruct(matrix->rows, 1);
-    for(int i = 0; i < matrix->rows; i++){
+    for(int i = 0; i < matrix->rows; i++)
+    {
         ret->matrix[i][0] = matrix->matrix[i][col];
     }
     return ret;
