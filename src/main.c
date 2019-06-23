@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <getopt.h>
+#include "include/ConfigurationStruct.h"
 #include "include/BMPLibrary.h"
 #include "matrixStruct.h"
 #include "random.h"
@@ -112,6 +114,25 @@ int main(int argc, char* argv[])
 
 	//distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
 	distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
+    Configuration configuration = initializeConfiguration();
+    int c;
+    while(((c = getopt(argc, argv, "rds:m:k:n:l:"))) != -1)
+    {
+        switch(c)
+        {
+            case 'r':
+                if(configuration->isRecovery == -1)
+                {
+                    configuration->isRecovery = 1;
+                }
+            case 'd':
+                if(configuration->isRecovery == -1)
+                {
+                    configuration->isRecovery = 0;
+                }
+        }
+    }
+
 	/*MatrixStruct* matricesS = retreiveSMatricesFromImage(argv[1], 8);
 
 	bitmapFileHeader BMPFileHeader;
@@ -291,5 +312,10 @@ int main(int argc, char* argv[])
 	    printf("\n");
 	}
 
+
+
+	    }
+	    printf("\n");
+	}
 	printf("%d", ret[0]->matrix[0][0]);*/
 }
