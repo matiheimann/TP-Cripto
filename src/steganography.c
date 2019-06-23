@@ -83,7 +83,7 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
 		}
 
 		BMPFileHeader.reservedField_1 = currentShadowImage;
-		writeBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader, pixelArray);
+		writeBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader, pixelArray, NULL);
 	    free(pixelArray);
 		currentShadowImage++;
     }

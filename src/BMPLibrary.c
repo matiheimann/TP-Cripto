@@ -98,7 +98,7 @@ int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformati
     return 1;
 }
 
-int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* pixelArray)
+int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* pixelArray, unsigned char* extraData)
 {
     FILE* filePointer; 
     filePointer = fopen(filePath,"wb");
@@ -124,6 +124,15 @@ int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformation
     }
 
     //fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
+    if(extraData != NULL)
+    {
+        if(fwrite(extraData, fileHeader->offsetBitsFromHeaderToBitmap - sizeof(bitmapInformationHeader) - sizeof(bitmapFileHeader), 1, filePointer) != 1)
+        {
+            printf("Error writing information header\n");
+            fclose(filePointer);
+            return -1;
+        }
+    }
 
     if(fwrite(pixelArray, 1, (informationHeader->bitsPerPixel/8) * informationHeader->bitmapWidth * informationHeader->bitmapHeight, filePointer) != informationHeader->imageSize)
     {
@@ -197,4 +206,28 @@ unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHe
 
     fclose(filePointer); 
     return bitmapImageData;
+}
+
+unsigned char* getExtraDataFromImage(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader)
+{
+    int extraDataLength = fileHeader->offsetBitsFromHeaderToBitmap - sizeof(bitmapFileHeader) - sizeof(bitmapInformationHeader);
+
+    if(extraDataLength <= 0)
+        return NULL;
+
+    FILE* filePointer; 
+    filePointer = fopen(BMPFile,"rb");
+
+    if (filePointer == NULL)
+    {
+        printf("error opening bmp file\n");
+        return NULL;
+    }
+
+    unsigned char* extraData = malloc(extraDataLength);
+
+    fseek(filePointer, sizeof(bitmapFileHeader) + sizeof(bitmapInformationHeader), SEEK_SET);
+    fread(extraData, extraDataLength, 1, filePointer);
+    
+    return extraData;
 }

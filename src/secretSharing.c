@@ -230,11 +230,11 @@ MatrixStruct* retreiveSquaredMatricesFromImage(char* imageFilePath, int matrixDi
     return matricesToReturn;
 }
 
-void createImageFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader)
+void createImageFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* extraData)
 {
     unsigned char* bitmapArray = getBitmapArrayFromMatrices(matrices, dimension, matricesAmount);
 
-    writeBMPFile(filePath, fileHeader, informationHeader, bitmapArray);
+    writeBMPFile(filePath, fileHeader, informationHeader, bitmapArray, extraData);
     free(bitmapArray);
 }
 

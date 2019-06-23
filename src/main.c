@@ -42,16 +42,21 @@ void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, cha
 
 	hideMatricesInImagesWithLSB(imageShares.ShMatrices, carrierImagesDirectory, steganographyModeToUse, imageShares.ShMatricesAmount);
 
-	createImageFromMatrices(imageShares.RwMatrices, n, imageShares.RwMatricesAmount, "RW.bmp", &BMPFileHeader, &BMPInformationHeader);
+	unsigned char* extraData = getExtraDataFromImage(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+
+	createImageFromMatrices(imageShares.RwMatrices, n, imageShares.RwMatricesAmount, "RW.bmp", &BMPFileHeader, &BMPInformationHeader, extraData);
 	
 	//TESTS
-	/*	
-	bitmapFileHeader BMPFileHeader;
+	
+	/*bitmapFileHeader BMPFileHeader;
 	bitmapInformationHeader BMPInformationHeader;
 	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+
 	MatrixStruct* matricesS = retreiveSquaredMatricesFromImage(imageToHide, n);
 
-	createImageFromMatrices(matricesS, 8, 1925, "test.bmp", &BMPFileHeader, &BMPInformationHeader);
+	unsigned char* extraData = getExtraDataFromImage(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+
+	createImageFromMatrices(matricesS, 8, 1925, "test.bmp", &BMPFileHeader, &BMPInformationHeader, extraData);
 
 	printBMPFileHeader(&BMPFileHeader);
 

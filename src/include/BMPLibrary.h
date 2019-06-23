@@ -42,12 +42,14 @@ char isValidBMPHeader(bitmapFileHeader* bmpHeaderToValidate);
 
 int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformationHeader* outInformationHeader);
 
-int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* pixelArray);
+int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* pixelArray, unsigned char* extraData);
 
 void printBMPFileHeader(bitmapFileHeader* fileHeaderToPrint);
 
 void printBMPInformationHeader(bitmapInformationHeader* informationHeaderToPrint);
 
 unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader);
+
+unsigned char* getExtraDataFromImage(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader);
 
 #endif

@@ -40,7 +40,7 @@ bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matr
 
 MatrixStruct* retreiveSquaredMatricesFromImage(char* imageFilePath, int matrixDimension);
 
-void createImageFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader);
+void createImageFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader, unsigned char* extraData);
 
 unsigned char* getBitmapArrayFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount);
 
