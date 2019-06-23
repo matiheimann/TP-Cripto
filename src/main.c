@@ -287,12 +287,9 @@ int main(int argc, char* argv[])
 	            printf("%d ", ret[i]->matrix[j][k]);
 	        }
 	        printf("\n");
->>>>>>> Stashed changes
 	    }
 	    printf("\n");
 	}
-<<<<<<< Updated upstream
 
-=======
 	printf("%d", ret[0]->matrix[0][0]);*/
 }
