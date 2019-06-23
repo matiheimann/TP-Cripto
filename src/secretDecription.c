@@ -72,10 +72,10 @@ MatrixStruct recoverMatrixDoubleS(MatrixStruct* matrixSh, int size)
 {
     MatrixStruct matrixDoubleS = newEmptyMatrixStruct();
     MatrixStruct matrixB = newZeroMatrixStruct(matrixSh[0]->rows, size);
-    for(int i = 0; i < size; i++){
-        copyColumnToAnotherMatrix(matrixB, matrixSh[i], i, 1);
+    for(int i = 0; i < size; i++)
+    {
+        copyColumnToAnotherMatrix(matrixB, matrixSh[i], i, 0);
     }
-
     proyectionMatrix(matrixB, matrixDoubleS);
 
     return matrixDoubleS;

@@ -380,7 +380,8 @@ MatrixStruct copyColumn(MatrixStruct matrix, int col){
 
 void copyColumnToAnotherMatrix(MatrixStruct matrix1, MatrixStruct matrix2, int col1, int col2)
 {
-    for(int i = 0; i < matrix2->cols; i++){
+    for(int i = 0; i < matrix2->rows; i++)
+    {
         matrix1->matrix[i][col1] = matrix2->matrix[i][col2];
     }
 }
