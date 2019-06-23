@@ -189,7 +189,7 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
     return 1;
 }
 
-MatrixStruct* retreiveSMatricesFromImage(char* imageFilePath, int matrixDimension)
+MatrixStruct* retreiveSquaredMatricesFromImage(char* imageFilePath, int matrixDimension)
 {
     bitmapFileHeader BMPFileHeader;
     bitmapInformationHeader BMPInformationHeader;
@@ -228,7 +228,15 @@ MatrixStruct* retreiveSMatricesFromImage(char* imageFilePath, int matrixDimensio
     return matricesToReturn;
 }
 
-void createImageFromSMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader)
+void createImageFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader)
+{
+    unsigned char* bitmapArray = getBitmapArrayFromMatrices(matrices, dimension, matricesAmount);
+
+    writeBMPFile(filePath, fileHeader, informationHeader, bitmapArray);
+    free(bitmapArray);
+}
+
+unsigned char* getBitmapArrayFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount)
 {
     int bitmapArrayLength = dimension*dimension*matricesAmount;
     unsigned char* bitmapArray = malloc(bitmapArrayLength);
@@ -250,6 +258,5 @@ void createImageFromSMatrices(MatrixStruct* matrices, int dimension, int matrice
         currentMatrix++;
     }
 
-    writeBMPFile(filePath, fileHeader, informationHeader, bitmapArray);
-    free(bitmapArray);
+    return bitmapArray;
 }

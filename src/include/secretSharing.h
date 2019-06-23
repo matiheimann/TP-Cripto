@@ -5,6 +5,17 @@
 #include "matrixList.h"
 #include "BMPLibrary.h"
 
+struct imageShare {
+
+    MatrixStruct* ShMatrices;
+    int ShMatricesAmount;
+
+    MatrixStruct* RwMatrices;
+    int RwMatricesAmount;
+};
+
+typedef struct imageShare ImageShares;
+
 MatrixStruct* constructImageShare(MatrixStruct matrixS, int k, MatrixStruct matrixW);
 
 MatrixStruct generateMatrixX(int n, int k);
@@ -27,8 +38,10 @@ MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixLis
 
 bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matrixR, MatrixStruct matrixSdouble);
 
-MatrixStruct* retreiveSMatricesFromImage(char* imageFilePath, int matrixDimension);
+MatrixStruct* retreiveSquaredMatricesFromImage(char* imageFilePath, int matrixDimension);
 
-void createImageFromSMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader);
+void createImageFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader);
+
+unsigned char* getBitmapArrayFromMatrices(MatrixStruct* matrices, int dimension, int matricesAmount);
 
 #endif //MATRICES_RESOLVER_SECRETSHARING_H

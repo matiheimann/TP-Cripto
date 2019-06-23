@@ -2,6 +2,66 @@
 #include <stdlib.h>
 #include "BMPLibrary.h"
 
+int validateImageToHide(char* imageToValidate, int n)
+{
+    bitmapFileHeader BMPFileHeader;
+    bitmapInformationHeader BMPInformationHeader;
+
+    int readSuccess = readBMPFile(imageToValidate, &BMPFileHeader, &BMPInformationHeader);
+
+    if(readSuccess == 0)
+        return readSuccess;
+
+    if(BMPInformationHeader.bitsPerPixel != 8)
+    {
+        printf("Invalid secret image, it must be 8 bits per pixel\n");
+        return 0;
+    }
+
+    if((BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight % (n*n)) != 0)
+    {
+        printf("Invalid secret image, it must be divisible by n*n\n");
+        return 0;
+    }
+
+
+    return 1;
+}
+
+int validateWatermarkImage(char* imageToHide, char* watermarkImage)
+{
+    bitmapFileHeader watermarkFileHeader;
+    bitmapInformationHeader watermarkInformationHeader;
+
+    int readSuccess = readBMPFile(watermarkImage, &watermarkFileHeader, &watermarkInformationHeader);
+
+    if(readSuccess == 1)
+    {
+        if(watermarkInformationHeader.bitsPerPixel != 8)
+        {
+            printf("Invalid watermark image, it must be 8 bits per pixel\n");
+        }
+        
+        bitmapFileHeader imageToHideFileHeader;
+        bitmapInformationHeader imageToHideInformationHeader;
+
+        int secretImageRead = readBMPFile(imageToHide, &imageToHideFileHeader, &imageToHideInformationHeader);
+    
+        if(secretImageRead == 1)
+        {
+            if((watermarkInformationHeader.bitmapWidth == imageToHideInformationHeader.bitmapWidth)
+                && (watermarkInformationHeader.bitmapHeight == imageToHideInformationHeader.bitmapHeight))
+                return 1;
+            else
+            {
+                printf("Invalid watermark image, it must be of same width and height than the secret image\n");
+            }
+        }
+    }
+
+    return 0;
+}
+
 char isValidBMPHeader(bitmapFileHeader* bmpHeaderToValidate)
 {
 	if (bmpHeaderToValidate->fileType != VALID_BMP_FILE_ID)
@@ -19,8 +79,8 @@ int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformati
 
     if (filePointer == NULL)
     {
-        printf("Error opening file, invalid path\n");
-        return -1;
+        printf("Error opening bmp file, invalid path\n");
+        return 0;
     }
 
     fread(outFileHeader, sizeof(bitmapFileHeader), 1, filePointer);
@@ -28,8 +88,8 @@ int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformati
     if(!isValidBMPHeader(outFileHeader))
     {
         fclose(filePointer);
-        printf("Error opening file, invalid bmp image\n");
-        return -1;
+        printf("Error opening bmp file, invalid bmp format\n");
+        return 0;
     }
 
     fread(outInformationHeader, sizeof(bitmapInformationHeader), 1, filePointer); 
@@ -63,9 +123,9 @@ int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformation
         return -1;
     }
 
-    fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
+    //fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
 
-    if(fwrite(pixelArray, 1, informationHeader->imageSize, filePointer) != informationHeader->imageSize)
+    if(fwrite(pixelArray, 1, (informationHeader->bitsPerPixel/8) * informationHeader->bitmapWidth * informationHeader->bitmapHeight, filePointer) != informationHeader->imageSize)
     {
         printf("Error writing bitmap array\n");
         fclose(filePointer);
@@ -115,7 +175,7 @@ unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHe
         return NULL;
     }
 
-    bitmapImageData = (unsigned char*) malloc(BMPInfoHeader->imageSize);
+    bitmapImageData = (unsigned char*) malloc((BMPInfoHeader->bitsPerPixel/8) * BMPInfoHeader->bitmapWidth * BMPInfoHeader->bitmapHeight);
 
     if (bitmapImageData == NULL)
     {
@@ -126,7 +186,7 @@ unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHe
     }
 
     fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
-    fread(bitmapImageData, BMPInfoHeader->imageSize, 1, filePointer);
+    fread(bitmapImageData, (BMPInfoHeader->bitsPerPixel/8) * BMPInfoHeader->bitmapWidth * BMPInfoHeader->bitmapHeight, 1, filePointer);
 
     if (bitmapImageData == NULL)
     {

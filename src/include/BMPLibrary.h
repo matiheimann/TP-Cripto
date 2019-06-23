@@ -34,6 +34,10 @@ typedef struct bitmapInformationHeaderStruct
 
 #pragma pack(pop)
 
+int validateImageToHide(char* imageToValidate, int n);
+
+int validateWatermarkImage(char* imageToHide, char* watermarkImage);
+
 char isValidBMPHeader(bitmapFileHeader* bmpHeaderToValidate);
 
 int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformationHeader* outInformationHeader);

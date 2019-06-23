@@ -13,4 +13,6 @@
 void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int matricesAmount);
 
 MatrixStruct* retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steganographyMode, int rows, int cols, int matricesToRetreiveAmount);
+
+int validateCarrierImages(int secretImageSize, int n, char* imagesFolderPath);
 #endif

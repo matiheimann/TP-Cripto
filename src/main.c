@@ -8,8 +8,105 @@
 #include "include/secretSharing.h"
 #include "include/steganography.h"
 
+void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
+
+ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, MatrixStruct* matricesW, int n, int k);
+
+void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory)
+{
+	if(validateImageToHide(imageToHide, n) == 0)
+		return;
+
+	if(validateWatermarkImage(imageToHide, watermarkImage) == 0)
+		return;
+
+	bitmapFileHeader BMPFileHeader;
+	bitmapInformationHeader BMPInformationHeader;
+	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+
+	if(validateCarrierImages(BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight, n, carrierImagesDirectory) == 0)
+		return;
+
+	MatrixStruct* matricesS = retreiveSquaredMatricesFromImage(imageToHide, n);
+	MatrixStruct* matricesW = retreiveSquaredMatricesFromImage(watermarkImage, n);
+
+	ImageShares imageShares = retreiveImageShares(imageToHide, matricesS, matricesW, n, k);
+
+	int steganographyModeToUse;
+
+	if(k==4 && n==8)
+		steganographyModeToUse = LSB_MODE;
+
+	if(k==2 && n==4)
+		steganographyModeToUse = LSB2_MODE;
+
+	hideMatricesInImagesWithLSB(imageShares.ShMatrices, carrierImagesDirectory, steganographyModeToUse, imageShares.ShMatricesAmount);
+
+	createImageFromMatrices(imageShares.RwMatrices, n, imageShares.RwMatricesAmount, "RW.bmp", &BMPFileHeader, &BMPInformationHeader);
+	
+	//TESTS
+	/*	
+	bitmapFileHeader BMPFileHeader;
+	bitmapInformationHeader BMPInformationHeader;
+	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+	MatrixStruct* matricesS = retreiveSquaredMatricesFromImage(imageToHide, n);
+
+	createImageFromMatrices(matricesS, 8, 1925, "test.bmp", &BMPFileHeader, &BMPInformationHeader);
+
+	printBMPFileHeader(&BMPFileHeader);
+
+	printBMPInformationHeader(&BMPInformationHeader);
+
+	printf("%lu\n", sizeof(bitmapFileHeader));
+	printf("%lu\n", sizeof(bitmapInformationHeader));*/
+}
+
+ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, MatrixStruct* matricesW, int n, int k)
+{
+	bitmapFileHeader BMPFileHeader;
+	bitmapInformationHeader BMPInformationHeader;
+	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+  	
+  	int SmatricesAmount = (BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight)/(n*n);
+
+    MatrixStruct* matricesSh = malloc(sizeof(MatrixStruct) * SmatricesAmount * n);
+    MatrixStruct* matricesRw = malloc(sizeof(MatrixStruct) * SmatricesAmount);
+
+    int currentMatrixShIndex = 0;
+    int currentMatrixRwIndex = 0;
+
+    for(int i=0; i<SmatricesAmount; i++)
+    {
+    	MatrixStruct* tmp = constructImageShare(matricesS[i], k, matricesW[i]);
+
+    	int j = 0;
+    	while(j<n)
+    	{
+    		matricesSh[currentMatrixShIndex] = tmp[j];
+    		currentMatrixShIndex++;
+    		j++;
+    	}
+
+    	matricesRw[currentMatrixRwIndex] = tmp[j];
+    	currentMatrixRwIndex++;
+    }
+
+    ImageShares imageShares;
+
+    imageShares.ShMatrices = matricesSh;
+    imageShares.ShMatricesAmount = SmatricesAmount * n;
+
+    imageShares.RwMatrices = matricesRw;
+	imageShares.RwMatricesAmount = SmatricesAmount;
+
+    return imageShares;
+}
+
 int main(int argc, char* argv[])
 {
+
+	//distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
+	distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
 	/*MatrixStruct* matricesS = retreiveSMatricesFromImage(argv[1], 8);
 
 	bitmapFileHeader BMPFileHeader;

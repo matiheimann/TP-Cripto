@@ -44,8 +44,8 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
 		readBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
 
 		unsigned char* pixelArray;
-
 		pixelArray = getBitmapArrayFromBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
+
 		int pixelArrayLength = BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight*3;
 
 		int currentPixelIndex = 0;
@@ -170,4 +170,53 @@ MatrixStruct* retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steg
 		}
     }
     return matricesRetreived;
+}
+
+int validateCarrierImages(int secretImageSize, int n, char* imagesFolderPath)
+{
+	DIR* directory;
+    struct dirent* directoryFile;
+    int imageFilePathLength;
+    int validImages = 0;
+
+    if ((directory = opendir (imagesFolderPath)) == NULL) 
+    {
+        fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
+        return 0;
+    }
+
+    while ((directoryFile = readdir(directory))) 
+    {
+        if (!strcmp (directoryFile->d_name, "."))
+        	continue;
+
+        if(!strcmp (directoryFile->d_name, ".."))
+        	continue;
+
+        imageFilePathLength = strlen(imagesFolderPath) + strlen(directoryFile->d_name) + 1;
+        char imageFilePath[imageFilePathLength];
+
+        memset(imageFilePath, 0, imageFilePathLength);
+
+        strncpy(imageFilePath, imagesFolderPath, strlen(imagesFolderPath));
+        strcat(imageFilePath, directoryFile->d_name);
+
+        bitmapFileHeader BMPFileHeader;
+		bitmapInformationHeader BMPInformationHeader;
+		
+		if(readBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader) == 1)
+		{
+			if((BMPInformationHeader.bitmapHeight*BMPInformationHeader.bitmapWidth == secretImageSize)
+				&& BMPInformationHeader.bitsPerPixel == 24)
+				validImages++;
+		}
+    }
+
+    if(validImages != n)
+    {
+    	printf("Invalid carrier images folder, make sure images have same width and height than the secret image, and that they are 24 bits per pixel\n");
+    	return 0;
+    }
+
+    return 1;
 }
