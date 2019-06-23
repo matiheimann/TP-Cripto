@@ -3,6 +3,7 @@
 
 #include "matrixStruct.h"
 #include "matrixList.h"
+#include "BMPLibrary.h"
 
 MatrixStruct* constructImageShare(MatrixStruct matrixS, int k, MatrixStruct matrixW);
 
@@ -26,5 +27,8 @@ MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixLis
 
 bool verifyImage(MatrixStruct matrixS, MatrixStruct watermark, MatrixStruct matrixR, MatrixStruct matrixSdouble);
 
+MatrixStruct* retreiveSMatricesFromImage(char* imageFilePath, int matrixDimension);
+
+void createImageFromSMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader);
 
 #endif //MATRICES_RESOLVER_SECRETSHARING_H

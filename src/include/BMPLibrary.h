@@ -34,15 +34,7 @@ typedef struct bitmapInformationHeaderStruct
 
 #pragma pack(pop)
 
-unsigned char** getBitmapMatrixFromBMPFile(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader);
-
 char isValidBMPHeader(bitmapFileHeader* bmpHeaderToValidate);
-
-unsigned char** getMatrixFromBitmapArray(unsigned char* bitmapArray, int numberOfRows);
-
-unsigned char** reserveSpaceForMatrix();
-
-void swapBGRToRGB(unsigned char* imageBitmap, unsigned int imageSize);
 
 int readBMPFile(char* filename, bitmapFileHeader* outFileHeader, bitmapInformationHeader* outInformationHeader);
 

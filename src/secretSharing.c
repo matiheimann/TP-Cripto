@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-MatrixStruct* costructImageShare(MatrixStruct matrixS, int k, MatrixStruct matrixW)
+MatrixStruct* constructImageShare(MatrixStruct matrixS, int k, MatrixStruct matrixW)
 {
     MatrixStruct* result = malloc(sizeof(MatrixStruct*) * (matrixS->rows + 1));
     MatrixStruct matrixA = generateMatrixA(matrixS, matrixS->rows, k);
@@ -189,3 +189,67 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
     return 1;
 }
 
+MatrixStruct* retreiveSMatricesFromImage(char* imageFilePath, int matrixDimension)
+{
+    bitmapFileHeader BMPFileHeader;
+    bitmapInformationHeader BMPInformationHeader;
+    unsigned char* bitmapArray;
+
+    readBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
+    bitmapArray = getBitmapArrayFromBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
+
+    int currentPixelIndex = 0;
+    int bitmapArrayLength = BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight;
+
+    MatrixStruct* matricesToReturn = malloc(sizeof(MatrixStruct));
+    int currentMatrixIndex = 0;
+
+    while(currentPixelIndex < bitmapArrayLength)
+    {
+        int i,j;
+        MatrixStruct currentMatrix = newZeroMatrixStruct(matrixDimension, matrixDimension);
+
+        for(i=0; i<matrixDimension; i++)
+        {
+            for(j=0; j<matrixDimension; j++)
+            {
+                currentMatrix->matrix[i][j] = bitmapArray[currentPixelIndex];
+                currentPixelIndex++;
+            }
+        }
+
+        matricesToReturn = realloc(matricesToReturn, sizeof(MatrixStruct)*(currentMatrixIndex + 1));
+
+        matricesToReturn[currentMatrixIndex] = currentMatrix;
+        currentMatrixIndex++;
+    }
+
+    free(bitmapArray);
+    return matricesToReturn;
+}
+
+void createImageFromSMatrices(MatrixStruct* matrices, int dimension, int matricesAmount, char* filePath, bitmapFileHeader* fileHeader, bitmapInformationHeader* informationHeader)
+{
+    int bitmapArrayLength = dimension*dimension*matricesAmount;
+    unsigned char* bitmapArray = malloc(bitmapArrayLength);
+
+    int currentMatrix = 0;
+    int currentPixel = 0;
+    while(currentMatrix < matricesAmount)
+    {
+        int i,j;
+        for(i=0; i<dimension; i++)
+        {
+            for(j=0; j<dimension; j++)
+            {
+                bitmapArray[currentPixel] = matrices[currentMatrix]->matrix[i][j];
+                currentPixel++;
+            }
+        }
+
+        currentMatrix++;
+    }
+
+    writeBMPFile(filePath, fileHeader, informationHeader, bitmapArray);
+    free(bitmapArray);
+}
