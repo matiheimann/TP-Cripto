@@ -177,11 +177,6 @@ int main(int argc, char* argv[])
 	}
 	
     Configuration configuration = initializeConfiguration();
-    if(argc == 1)
-    {
-				printMessage();
-				return EXIT_FAILURE;
-    }
    	int c;
     while(((c = getopt(argc, argv, "rds:m:k:n:l:"))) != -1)
     {
@@ -194,6 +189,7 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
+                	printf("Operation type parameter already setted\n");
 					printMessage();
 					return EXIT_FAILURE;
                 }
@@ -205,8 +201,9 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
+                	printf("Operation type parameter already setted\n");
                     printMessage();
-										return EXIT_FAILURE;
+					return EXIT_FAILURE;
                 }
                 break;
             case 's':
@@ -216,8 +213,9 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-              			printMessage();
-								    return EXIT_FAILURE;
+                	printf("Secret image already setted\n");
+          			printMessage();
+				    return EXIT_FAILURE;
                 }
                 break;
             case 'm':
@@ -227,30 +225,33 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
+                	printf("Watermark image already setted\n");
                     printMessage();
-										return EXIT_FAILURE;
+					return EXIT_FAILURE;
                 }
                 break;
             case 'k':
-                if(configuration->k == 0 && isNaturalNumber(optarg))
+                if(configuration->k == 0 /*&& isNaturalNumber(optarg)*/)
                 {
                     configuration->k = atoi(optarg);
                 }
                 else
                 {
+                	printf("Invalid K parameter\n");
                     printMessage();
-										return EXIT_FAILURE;
+					return EXIT_FAILURE;
                 }
                 break;
             case 'n':
-                if(configuration->n == 0 && isNaturalNumber(optarg))
+                if(configuration->n == 0 /*&& isNaturalNumber(optarg)*/)
                 {
                     configuration->n = atoi(optarg);
                 }
                 else
                 {
+                	printf("Invalid N parameter\n");
                     printMessage();
-										return EXIT_FAILURE;
+					return EXIT_FAILURE;
                 }
                 break;
             case 'l':
@@ -260,23 +261,25 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
+                	printf("Invalid directory for image shares\n");
                     printMessage();
-										return EXIT_FAILURE;
+					return EXIT_FAILURE;
                 }
                 break;
             default:
                 printMessage();
-								return EXIT_FAILURE;
+				return EXIT_FAILURE;
         }
+    }
 
-        if(configuration->k == 0 || configuration->n == 0 || strcmp(configuration->directory, "") == 0 ||
-            strcmp(configuration->watermark, "") == 0 || strcmp(configuration->secretImage, "") == 0 ||
-            configuration->isRecovery == 0)
-        {
-
-			printMessage();
-			return EXIT_FAILURE;
-        }
+    if(configuration->k == 0 || configuration->n == 0 || strcmp(configuration->directory, "") == 0 ||
+    strcmp(configuration->watermark, "") == 0 || strcmp(configuration->secretImage, "") == 0 ||
+    configuration->isRecovery == -1)
+    {
+    	printf("Invalid configuration\n");
+    	printConfiguration(configuration);
+		printMessage();
+		return EXIT_FAILURE;
     }
 
     bool programSuccess;

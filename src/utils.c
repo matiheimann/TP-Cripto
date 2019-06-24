@@ -4,7 +4,7 @@
 
 #include "include/utils.h"
 #include <string.h>
-
+#include <stdio.h>
 int isNaturalNumber(char* num)
 {
     int i = 0;
@@ -15,5 +15,6 @@ int isNaturalNumber(char* num)
             return 0;
         }
     }
+
     return 1;
 }

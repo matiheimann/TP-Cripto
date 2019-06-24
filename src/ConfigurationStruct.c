@@ -4,6 +4,7 @@
 
 #include "include/ConfigurationStruct.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 Configuration initializeConfiguration()
 {
@@ -15,4 +16,14 @@ Configuration initializeConfiguration()
     conf->secretImage = "";
     conf->watermark = "";
     return conf;
+}
+
+void printConfiguration(Configuration configuration)
+{
+	printf("Is recovery: %d\n", configuration->isRecovery);
+	printf("Directory: %s\n", configuration->directory);
+	printf("K: %d\n", configuration->k);
+	printf("N: %d\n", configuration->n);
+	printf("Secret image: %s\n", configuration->secretImage);
+	printf("Watermark: %s\n", configuration->watermark);
 }

@@ -20,4 +20,6 @@ typedef struct ConfigurationStruct* Configuration;
 
 Configuration initializeConfiguration();
 
+void printConfiguration(Configuration configuration);
+
 #endif //TP_CRIPTO_CONFIGURATIONSTRUCT_H
