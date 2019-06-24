@@ -179,14 +179,14 @@ int validateMatrixA(MatrixStruct matrixToValidate, MatrixStruct matrixS, int k) 
     MatrixStruct proyectionMatrixToValidate = newEmptyMatrixStruct();
     proyectionMatrix(matrixToValidate, proyectionMatrixToValidate);
 
-    MatrixStruct matrixRToValidate = newEmptyMatrixStruct();
-    matrixRToValidate = subMatrixWithoutModule(matrixS, proyectionMatrixToValidate);
+    MatrixStruct matrixRToValidate = newZeroMatrixStruct(matrixS->rows, matrixS->cols);
+    substractMatrix(matrixS, proyectionMatrixToValidate, matrixRToValidate);
 
     for(int i=0; i<matrixRToValidate->rows; i++)
     {
         for(int j=0; j<matrixRToValidate->cols; j++)
         {
-            if(matrixRToValidate->matrix[i][j] % 256 > 250) {
+            if(matrixRToValidate->matrix[i][j] % 251 > 250) {
                 return 0;
             }
             matrixRToValidate->matrix[i][j] = matrixRToValidate->matrix[i][j] % 256;

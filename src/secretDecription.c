@@ -7,12 +7,13 @@
 
 MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR)
 {
-    MatrixStruct matrixS = sumMatrixWithoutModule(matrixDoubleS, matrixR);
+    MatrixStruct matrixS = newZeroMatrixStruct(matrixR->rows, matrixR->cols);
+    addMatrix(matrixDoubleS, matrixR, matrixS);
     for(int i = 0; i < matrixS->rows; i++)
     {
         for(int j = 0; j < matrixS->cols; j++)
         {
-            matrixS->matrix[i][j] = matrixS->matrix[i][j] % 256;
+            matrixS->matrix[i][j] = matrixS->matrix[i][j];
         }
     }
     return matrixS;
@@ -20,12 +21,13 @@ MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR)
 
 MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw)
 {
-    MatrixStruct matrixW = sumMatrixWithoutModule(matrixDoubleS, matrixRw);
+    MatrixStruct matrixW = newZeroMatrixStruct(matrixRw->rows, matrixRw->cols);
+    addMatrix(matrixDoubleS, matrixRw, matrixW);
     for(int i = 0; i < matrixW->rows; i++)
     {
         for(int j = 0; j < matrixW->cols; j++)
         {
-            matrixW->matrix[i][j] = matrixW->matrix[i][j] % 256;
+            matrixW->matrix[i][j] = matrixW->matrix[i][j];
         }
     }
     return matrixW;

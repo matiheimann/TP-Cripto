@@ -114,8 +114,14 @@ ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, Matr
 int main(int argc, char* argv[])
 {
 	//distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
-	distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
+	//distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
     Configuration configuration = initializeConfiguration();
+    if(argc == 1)
+    {
+        printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+        printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+        return EXIT_FAILURE;
+    }
     int c;
     while(((c = getopt(argc, argv, "rds:m:k:n:l:"))) != -1)
     {
@@ -209,6 +215,15 @@ int main(int argc, char* argv[])
                 printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
                 printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
                 return EXIT_FAILURE;
+        }
+
+        if(configuration->k == 0 || configuration->n == 0 || strcmp(configuration->directory, "") == 0 ||
+            strcmp(configuration->watermark, "") == 0 || strcmp(configuration->secretImage, "") == 0 ||
+            configuration->isRecovery == 0)
+        {
+            printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+            printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+            return EXIT_FAILURE;
         }
     }
 
