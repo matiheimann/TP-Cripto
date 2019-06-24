@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
                 }
                 break;
             case 'k':
-                if(configuration->k == 0)
+                if(configuration->k == 0 && isNaturalNumber(optarg))
                 {
                     configuration->k = atoi(optarg);
                 }
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
                 }
                 break;
             case 'n':
-                if(configuration->n == 0)
+                if(configuration->n == 0 && isNaturalNumber(optarg))
                 {
                     configuration->n = atoi(optarg);
                 }

@@ -5,7 +5,7 @@
 #include "include/utils.h"
 #include <string.h>
 
-int isNum(char* num)
+int isNaturalNumber(char* num)
 {
     int i = 0;
     while(num[i] != 0)
