@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <getopt.h>
+#include <string.h>
 #include "include/ConfigurationStruct.h"
 #include "include/BMPLibrary.h"
 #include "matrixStruct.h"
@@ -125,11 +126,89 @@ int main(int argc, char* argv[])
                 {
                     configuration->isRecovery = 1;
                 }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
             case 'd':
                 if(configuration->isRecovery == -1)
                 {
                     configuration->isRecovery = 0;
                 }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
+            case 's':
+                if(strcmp(configuration->secretImage, "") == 0)
+                {
+                    configuration->secretImage = optarg;
+                }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
+            case 'm':
+                if(strcmp(configuration->watermark, "") == 0)
+                {
+                    configuration->watermark = optarg;
+                }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
+            case 'k':
+                if(configuration->k == 0)
+                {
+                    configuration->k = atoi(optarg);
+                }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
+            case 'n':
+                if(configuration->n == 0)
+                {
+                    configuration->n = atoi(optarg);
+                }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
+            case 'l':
+                if(strcmp(configuration->directory, "") == 0)
+                {
+                    configuration->directory = optarg;
+                }
+                else
+                {
+                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    return EXIT_FAILURE;
+                }
+                break;
+            default:
+                printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                return EXIT_FAILURE;
         }
     }
 
