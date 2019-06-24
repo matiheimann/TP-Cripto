@@ -10,9 +10,23 @@
 #define LSB_MODE 1
 #define LSB2_MODE 2
 
-void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int matricesAmount);
+struct shadowedShare {
 
-MatrixStruct* retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steganographyMode, int rows, int cols, int matricesToRetreiveAmount);
+    MatrixStruct* ShMatrices;
 
-int validateCarrierImages(int secretImageSize, int n, char* imagesFolderPath);
+    int* associatedShadows;
+};
+
+typedef struct shadowedShare ShadowedShares;
+
+void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int ShMatricesPerParticipant, int n);
+
+MatrixStruct* selectMatricesToHide(MatrixStruct* matricesToHide, int matricesShareNumber, int n, int ShMatricesPerParticipant);
+
+ShadowedShares retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steganographyMode, int n, int k, int ShMatricesPerParticipant, int ShMatricesAmount);
+
+int validateCarrierImages(int secretImageSize, int requiredImages, char* imagesFolderPath);
+
+int validateCarrierImagesForRecovery(int requiredImages, char* imagesFolderPath);
+
 #endif

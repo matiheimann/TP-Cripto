@@ -4,6 +4,7 @@
 
 #include "include/secretDecription.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 MatrixStruct recoverMatrixS(MatrixStruct matrixDoubleS, MatrixStruct matrixR)
 {
@@ -35,24 +36,24 @@ MatrixStruct recoverMatrixW(MatrixStruct matrixDoubleS, MatrixStruct matrixRw)
 
 MatrixStruct recoverMatrixR(MatrixStruct* matrixG, int* shadowNumber, int size)
 {
-    MatrixStruct matrixAux = newZeroMatrixStruct(matrixG[0]->rows, matrixG[0]->rows + 1);
+    int val = matrixG[0]->rows/matrixG[0]->cols;
+    MatrixStruct matrixAux = newZeroMatrixStruct(val, val + 1);
     MatrixStruct matrixR = newZeroMatrixStruct(matrixG[0]->rows, matrixG[0]->rows);
 
-    for(int i = 0; i < matrixG[0]->rows; i++)
+    for(int i = 0; i < val; i++)
     {
-        for(int j = 0; j < size; j++)
+        for(int j = 0; j < val; j++)
         {
-            matrixAux->matrix[i][j] = (j == size - 1) ? shadowNumber[i] : 1;
+            matrixAux->matrix[i][j] = (j == val - 1) ? shadowNumber[i] : 1;
         }
     }
-
     for(int i = 0; i < matrixG[0]->rows; i++)
     {
         for(int j = 0; j < matrixG[0]->cols; j++)
         {
             for(int k = 0; k < size; k++)
             {
-                matrixAux->matrix[k][matrixG[0]->rows] = matrixG[k]->matrix[i][j];
+                matrixAux->matrix[k][matrixG[0]->cols] = matrixG[k]->matrix[i][j];
             }
             int val = matrixG[0]->rows/matrixG[0]->cols;
             int * ans = malloc(sizeof(int) * val);

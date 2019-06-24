@@ -8,13 +8,11 @@
 #include "steganography.h"
 #include "BMPLibrary.h"
 
-void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int matricesAmount)
+void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int ShMatricesPerParticipant, int n)
 {
 	DIR* directory;
     struct dirent* directoryFile;
     int imageFilePathLength;
-
-    int currentMatrixToHideIndex = 0;
 
     if ((directory = opendir (imagesFolderPath)) == NULL) 
     {
@@ -50,9 +48,13 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
 
 		int currentPixelIndex = 0;
 
-		while(currentPixelIndex<pixelArrayLength && currentMatrixToHideIndex<matricesAmount)
+	    int currentMatrixToHideIndex = 0;
+
+		MatrixStruct* currentMatricesToHide = selectMatricesToHide(matricesToHide, currentShadowImage, n, ShMatricesPerParticipant);
+
+		while(currentPixelIndex<pixelArrayLength)
 		{
-			MatrixStruct currentMatrixToHide = matricesToHide[currentMatrixToHideIndex];
+			MatrixStruct currentMatrixToHide = currentMatricesToHide[currentMatrixToHideIndex];
 
 			for(int i=0; i<currentMatrixToHide->rows; i++)
 			{
@@ -79,6 +81,7 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
 					}
 				}
 			}
+
 			currentMatrixToHideIndex++;
 		}
 
@@ -89,22 +92,39 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
     }
 }
 
-MatrixStruct* retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steganographyMode, int rows, int cols, int matricesToRetreiveAmount)
+MatrixStruct* selectMatricesToHide(MatrixStruct* matricesToHide, int matricesShareNumber, int n, int ShMatricesPerParticipant)
+{
+	MatrixStruct* matrixShares = malloc(sizeof(MatrixStruct) * ShMatricesPerParticipant);
+
+	for(int i=0; i<ShMatricesPerParticipant; i++)
+	{
+		matrixShares[i] = matricesToHide[((matricesShareNumber-1)*n)+i];
+	}
+
+	return matrixShares;
+}
+
+ShadowedShares retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steganographyMode, int n, int k, int ShMatricesPerParticipant, int ShMatricesAmount)
 {
 	DIR* directory;
 
     if ((directory = opendir (imagesFolderPath)) == NULL) 
     {
         fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
-        return NULL;
+        ShadowedShares shadowedImageShares;
+    	shadowedImageShares.ShMatrices = NULL;
+    	shadowedImageShares.associatedShadows = NULL;
+        return shadowedImageShares;
     }
 
    	struct dirent* directoryFile;
 
     int imageFilePathLength;
 
-    int currentMatrixToRetreiveIndex = 0;
-    MatrixStruct* matricesRetreived = malloc(sizeof(MatrixStruct) * matricesToRetreiveAmount);
+	int* associatedShadowNumbers = malloc(sizeof(int) * ShMatricesAmount);
+
+    MatrixStruct* matricesRetreived = malloc(sizeof(MatrixStruct) * ShMatricesAmount);
+    int matricesRetreivedIndex = 0;
 
     while ((directoryFile = readdir(directory))) 
     {
@@ -133,9 +153,13 @@ MatrixStruct* retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steg
 
 		int currentPixelIndex = 0;
 
+		MatrixStruct* currentMatricesRetreived = malloc(sizeof(MatrixStruct) * ShMatricesPerParticipant);
+   		
+   		int currentMatrixToRetreiveIndex = 0;
+
 		while(currentPixelIndex<pixelArrayLength)
 		{
-			MatrixStruct currentMatrixToRetreive = newZeroMatrixStruct(rows, cols);
+			MatrixStruct currentMatrixToRetreive = newZeroMatrixStruct(n, (n/k)+1);
 
 			for(int i=0; i<currentMatrixToRetreive->rows; i++)
 			{
@@ -165,14 +189,27 @@ MatrixStruct* retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int steg
 
 			}
 
-			matricesRetreived[currentMatrixToRetreiveIndex] = currentMatrixToRetreive;
+			currentMatricesRetreived[currentMatrixToRetreiveIndex] = currentMatrixToRetreive;
 			currentMatrixToRetreiveIndex++;
 		}
+
+		for(int w=0; w<ShMatricesPerParticipant; w++)
+		{
+			matricesRetreived[matricesRetreivedIndex] = currentMatricesRetreived[w];
+			associatedShadowNumbers[matricesRetreivedIndex] = BMPFileHeader.reservedField_1;
+			matricesRetreivedIndex++;
+		}
     }
-    return matricesRetreived;
+
+    ShadowedShares shadowedImageShares;
+    shadowedImageShares.ShMatrices = matricesRetreived;
+
+    shadowedImageShares.associatedShadows = associatedShadowNumbers;
+
+    return shadowedImageShares;
 }
 
-int validateCarrierImages(int secretImageSize, int n, char* imagesFolderPath)
+int validateCarrierImages(int secretImageSize, int requiredImages, char* imagesFolderPath)
 {
 	DIR* directory;
     struct dirent* directoryFile;
@@ -212,7 +249,68 @@ int validateCarrierImages(int secretImageSize, int n, char* imagesFolderPath)
 		}
     }
 
-    if(validImages != n)
+    if(validImages < requiredImages)
+    {
+    	printf("Invalid carrier images folder, make sure images have same width and height than the secret image, and that they are 24 bits per pixel\n");
+    	return 0;
+    }
+
+    return 1;
+}
+
+int validateCarrierImagesForRecovery(int requiredImages, char* imagesFolderPath)
+{
+	DIR* directory;
+    struct dirent* directoryFile;
+    int imageFilePathLength;
+    int validImages = 0;
+
+    int firstImageWidth;
+    int firstImageHeight;
+
+    int firstImageChecked = 0;
+
+    if ((directory = opendir (imagesFolderPath)) == NULL) 
+    {
+        fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
+        return 0;
+    }
+
+    while ((directoryFile = readdir(directory))) 
+    {
+        if (!strcmp (directoryFile->d_name, "."))
+        	continue;
+
+        if(!strcmp (directoryFile->d_name, ".."))
+        	continue;
+
+        imageFilePathLength = strlen(imagesFolderPath) + strlen(directoryFile->d_name) + 1;
+        char imageFilePath[imageFilePathLength];
+
+        memset(imageFilePath, 0, imageFilePathLength);
+
+        strncpy(imageFilePath, imagesFolderPath, strlen(imagesFolderPath));
+        strcat(imageFilePath, directoryFile->d_name);
+
+        bitmapFileHeader BMPFileHeader;
+		bitmapInformationHeader BMPInformationHeader;
+		
+		if(readBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader) == 1)
+		{
+			if(firstImageChecked == 0)
+			{
+				firstImageHeight = BMPInformationHeader.bitmapHeight;
+				firstImageWidth = BMPInformationHeader.bitmapWidth;
+				firstImageChecked = 1;
+			}
+
+			if(BMPInformationHeader.bitmapHeight == firstImageHeight && BMPInformationHeader.bitmapWidth == firstImageWidth
+				&& BMPInformationHeader.bitsPerPixel == 24)
+				validImages++;
+		}
+    }
+
+    if(validImages < requiredImages)
     {
     	printf("Invalid carrier images folder, make sure images have same width and height than the secret image, and that they are 24 bits per pixel\n");
     	return 0;

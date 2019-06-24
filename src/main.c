@@ -11,10 +11,71 @@
 #include "include/secretSharing.h"
 #include "include/steganography.h"
 #include "include/utils.h"
+#include "include/secretDecription.h"
 
 void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
 
+void recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* carrierImagesDirectory);
+
 ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, MatrixStruct* matricesW, int n, int k);
+
+void recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* carrierImagesDirectory)
+{
+	if(validateCarrierImagesForRecovery(k, carrierImagesDirectory) == 0)
+		return;
+
+	bitmapFileHeader BMPFileHeader;
+	bitmapInformationHeader BMPInformationHeader;
+	readBMPFile(RwImage, &BMPFileHeader, &BMPInformationHeader);
+
+	int steganographyModeToUse;
+
+	if(k==4 && n==8)
+		steganographyModeToUse = LSB_MODE;
+
+	if(k==2 && n==4)
+		steganographyModeToUse = LSB2_MODE;
+
+	int ShMatricesAmount = ((BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight)/(n*n)) * n;
+	int ShMatricesPerParticipant = ShMatricesAmount/n;
+
+	MatrixStruct* RwMatrices = retreiveSquaredMatricesFromImage(RwImage, n);
+
+	ShadowedShares shadowedShares = retreiveMatricesFromImagesWithLSB(carrierImagesDirectory, steganographyModeToUse, n, k, ShMatricesPerParticipant, ShMatricesAmount);
+
+	int matricesSAmount = (BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight)/(n*n);
+
+	MatrixStruct* matricesS = malloc(sizeof(MatrixStruct) * matricesSAmount);
+	MatrixStruct* matricesW = malloc(sizeof(MatrixStruct) * matricesSAmount);
+
+	int currentMatrixIndex = 0;
+	int currentRwMatrixIndex = 0;
+
+	for(int i=0; i<ShMatricesPerParticipant; i++)
+	{
+		MatrixStruct* tmp = malloc(sizeof(MatrixStruct) * n);
+
+		int* shadows = malloc(sizeof(int) * n);
+
+		for(int j=0; j<n; j++)
+		{
+			tmp[j] = shadowedShares.ShMatrices[(j*ShMatricesPerParticipant)+i];
+			shadows[j] = shadowedShares.associatedShadows[(j*ShMatricesPerParticipant)+i];
+		}
+
+		MatrixStruct* result = recoveryAlgorithm(tmp, RwMatrices[currentRwMatrixIndex], shadows, k);
+		matricesS[currentMatrixIndex] = result[0];
+		matricesW[currentMatrixIndex] = result[1];
+		currentMatrixIndex++;
+		currentRwMatrixIndex++;
+	}
+
+
+	unsigned char* extraData = getExtraDataFromImage(RwImage, &BMPFileHeader, &BMPInformationHeader);
+
+	createImageFromMatrices(matricesS, n, matricesSAmount, newImageFilePath, &BMPFileHeader, &BMPInformationHeader, extraData);
+	createImageFromMatrices(matricesW, n, matricesSAmount, "Watermark", &BMPFileHeader, &BMPInformationHeader, extraData);
+}
 
 void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory)
 {
@@ -44,30 +105,11 @@ void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, cha
 	if(k==2 && n==4)
 		steganographyModeToUse = LSB2_MODE;
 
-	hideMatricesInImagesWithLSB(imageShares.ShMatrices, carrierImagesDirectory, steganographyModeToUse, imageShares.ShMatricesAmount);
+	hideMatricesInImagesWithLSB(imageShares.ShMatrices, carrierImagesDirectory, steganographyModeToUse, imageShares.ShMatricesAmount/n, n);
 
 	unsigned char* extraData = getExtraDataFromImage(imageToHide, &BMPFileHeader, &BMPInformationHeader);
 
 	createImageFromMatrices(imageShares.RwMatrices, n, imageShares.RwMatricesAmount, "RW.bmp", &BMPFileHeader, &BMPInformationHeader, extraData);
-	
-	//TESTS
-	
-	/*bitmapFileHeader BMPFileHeader;
-	bitmapInformationHeader BMPInformationHeader;
-	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
-
-	MatrixStruct* matricesS = retreiveSquaredMatricesFromImage(imageToHide, n);
-
-	unsigned char* extraData = getExtraDataFromImage(imageToHide, &BMPFileHeader, &BMPInformationHeader);
-
-	createImageFromMatrices(matricesS, 8, 1925, "test.bmp", &BMPFileHeader, &BMPInformationHeader, extraData);
-
-	printBMPFileHeader(&BMPFileHeader);
-
-	printBMPInformationHeader(&BMPInformationHeader);
-
-	printf("%lu\n", sizeof(bitmapFileHeader));
-	printf("%lu\n", sizeof(bitmapInformationHeader));*/
 }
 
 ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, MatrixStruct* matricesW, int n, int k)
@@ -91,11 +133,11 @@ ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, Matr
     	int j = 0;
     	while(j<n)
     	{
-    		matricesSh[currentMatrixShIndex] = tmp[j];
-    		currentMatrixShIndex++;
+    		matricesSh[currentMatrixShIndex + (j*SmatricesAmount)] = tmp[j];
     		j++;
     	}
 
+    	currentMatrixShIndex++;
     	matricesRw[currentMatrixRwIndex] = tmp[j];
     	currentMatrixRwIndex++;
     }
@@ -122,7 +164,8 @@ int main(int argc, char* argv[])
         printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
         return EXIT_FAILURE;
     }
-    int c;
+	recoverSecret(argv[1], argv[2], 4, 8, argv[3]);
+   	int c;
     while(((c = getopt(argc, argv, "rds:m:k:n:l:"))) != -1)
     {
         switch(c)
@@ -226,190 +269,4 @@ int main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
     }
-
-	/*MatrixStruct* matricesS = retreiveSMatricesFromImage(argv[1], 8);
-
-	bitmapFileHeader BMPFileHeader;
-	bitmapInformationHeader BMPInformationHeader;
-	readBMPFile(argv[1], &BMPFileHeader, &BMPInformationHeader);
-  	
-  	int matricesAmount = (BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight)/(8*8);
-  	int matricesShAmount = matricesAmount*8;
-
-    MatrixStruct* matricesSh = malloc(sizeof(MatrixStruct) * matricesShAmount);
-    int currentMatrixShIndex = 0;
-    for(int i=0; i<matricesAmount; i++)
-    {
-    	MatrixStruct* tmp = constructImageShare(matricesS[i], 4, matricesS[0]);
-
-    	for(int j=0; j<8; j++)
-    	{
-    		matricesSh[currentMatrixShIndex] = tmp[j];
-    		currentMatrixShIndex++;
-    	}
-    }
-
-    hideMatricesInImagesWithLSB(matricesSh, argv[2], LSB2_MODE, matricesShAmount);
-
-   	printf("Before:\n");
-    for(int a=0; a<2; a++)
-	{
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<5; j++)
-			{
-				printf("%u ", matricesSh[a]->matrix[i][j]);
-			}
-
-			printf("\n");
-		}
-
-		printf("\n");
-	}
-
-    MatrixStruct* matrixesShRetreived = retreiveMatricesFromImagesWithLSB(argv[2], LSB2_MODE, 8, 5, matricesShAmount);
-
-	printf("After:\n");
-	for(int a=0; a<2; a++)
-	{
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<5; j++)
-			{
-				printf("%u ", matrixesShRetreived[a]->matrix[i][j]);
-			}
-
-			printf("\n");
-		}
-
-		printf("\n");
-	}*/
-
-	//hideMatricesInImagesWithLSB(matricesS, argv[2], LSB_MODE);
-
-	/*MatrixStruct* matricesRetreived = retreiveMatricesFromImagesWithLSB(argv[2], LSB_MODE, 8);*/
-
-	/*for(int a=0; a<8; a++)
-	{
-		for(int b=0; b<8; b++)
-		{
-			printf("%d ", matricesRetreived[0]->matrix[a][b]);
-		}
-
-		printf("\n");
-	}*/
-    
-	//createImageFromSMatrices(matricesRetreived, 8, matricesAmount, argv[3], &BMPFileHeader, &BMPInformationHeader);
-
-	/*unsigned char* bitmapArray;
-	bitmapArray = getBitmapArrayFromBMPFile(argv[1], &BMPFileHeader, &BMPInformationHeader);
-
-	writeBMPFile(argv[2], &BMPFileHeader, &BMPInformationHeader, bitmapArray);
-
-	printBMPFileHeader(&BMPFileHeader);
-	printf("\n");
-	printBMPInformationHeader(&BMPInformationHeader);*/
-
-	/*for(int num=0; num<1925; num++)
-	{
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
-				printf("%d ", matricesS[num]->matrix[i][j]);
-			}
-
-			printf("\n");
-		}
-
-		printf("\n");
-	}*/
-
-	//MatrixStruct* matricesToHide = malloc(1);
-
-	//hideMatricesInImagesWithLSB(matricesToHide, argv[1]);
-	/*if(argc < 2)
-	{
-		return 0;
-	}
-
-	bitmapArray = getBitmapArrayFromBMPFile(argv[1], &BMPFileHeader, &BMPInformationHeader);
-
-	if(bitmapArray == NULL)
-	{
-		return 1;
-	}
-
-	//Write bmp file test
-	writeBMPFile("$HOME/test.bmp", &BMPFileHeader, &BMPInformationHeader, bitmapArray);
-
-	writeBMPFile("$HOME/test.bmp", &BMPFileHeader, &BMPInformationHeader, bitmapArray);*/
-	/*MatrixStruct testMatrixS = newZeroMatrixStruct(4,4);
-
-	testMatrixS->matrix[0][0] = 1;
-	testMatrixS->matrix[0][1] = 35;
-	testMatrixS->matrix[0][2] = 52;
-	testMatrixS->matrix[0][3] = 40;
-	testMatrixS->matrix[1][0] = 33;
-	testMatrixS->matrix[1][1] = 68;
-	testMatrixS->matrix[1][2] = 69;
-	testMatrixS->matrix[1][3] = 240;
-	testMatrixS->matrix[2][0] = 54;
-	testMatrixS->matrix[2][1] = 72;
-	testMatrixS->matrix[2][2] = 212;
-	testMatrixS->matrix[2][3] = 181;
-	testMatrixS->matrix[3][0] = 38;
-	testMatrixS->matrix[3][1] = 239;
-	testMatrixS->matrix[3][2] = 176;
-	testMatrixS->matrix[3][3] = 238;
-
-	MatrixStruct* matrixes = generateMatrixListG(testMatrixS, 2);
-
-
-	MatrixStruct testMatrixA = newZeroMatrixStruct(4, 2);
-
-	testMatrixA->matrix[0][0] = 3;
-	testMatrixA->matrix[0][1] = 7;
-	testMatrixA->matrix[1][0] = 6;
-	testMatrixA->matrix[1][1] = 1;
-	testMatrixA->matrix[2][0] = 2;
-	testMatrixA->matrix[2][1] = 5;
-	testMatrixA->matrix[3][0] = 6;
-	testMatrixA->matrix[3][1] = 6;
-
-	MatrixStruct testMatrixX = newZeroMatrixStruct(2, 4);
-
-	testMatrixX->matrix[0][0] = 9;
-	testMatrixX->matrix[1][0] = 5;
-
-	testMatrixX->matrix[0][1] = 4;
-	testMatrixX->matrix[1][1] = 4;
-
-	testMatrixX->matrix[0][2] = 9;
-	testMatrixX->matrix[1][2] = 8;
-
-	testMatrixX->matrix[0][3] = 3;
-	testMatrixX->matrix[1][3] = 2;
-
-	MatrixStruct testMatrixV = newZeroMatrixStruct(4,4);
-
-	testMatrixV = generateMatrixV(testMatrixA, testMatrixX);
-
-    MatrixStruct* ret = generateMatrixListSh(testMatrixV, matrixes);
-	for(int i=0; i<4; i++){
-	    for(int j =0 ; j < 4; j++){
-	        for(int k = 0; k < 3; k++){
-	            printf("%d ", ret[i]->matrix[j][k]);
-	        }
-	        printf("\n");
-	    }
-	    printf("\n");
-	}
-
-
-
-	    }
-	    printf("\n");
-	}
-	printf("%d", ret[0]->matrix[0][0]);*/
 }

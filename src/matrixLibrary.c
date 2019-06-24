@@ -45,11 +45,13 @@ void freeMatrix(int ** matrix, int rows, int cols)
     {
         return;
     }
+
     for (int i = 0; i < rows; i++)
     {
         free(matrix[i]);
     }
-    free(matrix);
+
+    //free(matrix);
 }
 
 /*          Getters, Setters && Copy    */
