@@ -5,6 +5,10 @@
 #include "include/utils.h"
 #include <string.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdlib.h>
 int isNaturalNumber(char* num)
 {
     int i = 0;
@@ -17,4 +21,11 @@ int isNaturalNumber(char* num)
     }
 
     return 1;
+}
+
+int is_regular_file(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISREG(path_stat.st_mode);
 }
