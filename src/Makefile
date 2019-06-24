@@ -2,7 +2,7 @@ include Makefile.inc
 SOURCES = $(wildcard *.c)
 OBJECTS = $(SOURCES:.c=.o)
 DEPS = $(wildcard include/*.h)
-PROJECT = ../project
+PROJECT = ../ss
 
 all: $(PROJECT)
 
