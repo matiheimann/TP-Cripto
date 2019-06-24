@@ -133,7 +133,7 @@ ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, Matr
     	int j = 0;
     	while(j<n)
     	{
-    		matricesSh[currentMatrixShIndex + (n*SmatricesAmount)] = tmp[j];
+    		matricesSh[currentMatrixShIndex + (j*SmatricesAmount)] = tmp[j];
     		j++;
     	}
 
