@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <time.h>
 #include <getopt.h>
 #include <string.h>
@@ -15,20 +16,24 @@
 
 void printMessage();
 
-void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
+bool distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
 
-void recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* carrierImagesDirectory);
+bool recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* carrierImagesDirectory);
 
 ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, MatrixStruct* matricesW, int n, int k);
 
-void recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* carrierImagesDirectory)
+bool recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* carrierImagesDirectory)
 {
 	if(validateCarrierImagesForRecovery(k, carrierImagesDirectory) == 0)
-		return;
+		return FALSE;
 
 	bitmapFileHeader BMPFileHeader;
 	bitmapInformationHeader BMPInformationHeader;
-	readBMPFile(RwImage, &BMPFileHeader, &BMPInformationHeader);
+
+	if(readBMPFile(RwImage, &BMPFileHeader, &BMPInformationHeader) == 0)
+	{
+		return FALSE;
+	}
 
 	int steganographyModeToUse;
 
@@ -62,7 +67,7 @@ void recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* ca
 		for(int j=0; j<n; j++)
 		{
 			tmp[j] = shadowedShares.ShMatrices[(j*ShMatricesPerParticipant)+i];
-			shadows[j] = shadowedShares.associatedShadows[(j*ShMatricesPerParticipant)+i];
+			shadows[j] = shadowedShares.associatedShadows[(j*ShMatricesPerParticipant)+i] + 1;
 		}
 
 		MatrixStruct* result = recoveryAlgorithm(tmp, RwMatrices[currentRwMatrixIndex], shadows, k);
@@ -72,27 +77,30 @@ void recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* ca
 		currentRwMatrixIndex++;
 	}
 
-
 	unsigned char* extraData = getExtraDataFromImage(RwImage, &BMPFileHeader, &BMPInformationHeader);
 
 	createImageFromMatrices(matricesS, n, matricesSAmount, newImageFilePath, &BMPFileHeader, &BMPInformationHeader, extraData);
-	createImageFromMatrices(matricesW, n, matricesSAmount, "Watermark", &BMPFileHeader, &BMPInformationHeader, extraData);
+	createImageFromMatrices(matricesW, n, matricesSAmount, "Watermark.bmp", &BMPFileHeader, &BMPInformationHeader, extraData);
+
+	return TRUE;
 }
 
-void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory)
+bool distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory)
 {
 	if(validateImageToHide(imageToHide, n) == 0)
-		return;
+		return FALSE;
 
 	if(validateWatermarkImage(imageToHide, watermarkImage) == 0)
-		return;
+		return FALSE;
 
 	bitmapFileHeader BMPFileHeader;
 	bitmapInformationHeader BMPInformationHeader;
-	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
+
+	if(readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader) == 0)
+		return FALSE;
 
 	if(validateCarrierImages(BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight, n, carrierImagesDirectory) == 0)
-		return;
+		return FALSE;
 
 	MatrixStruct* matricesS = retreiveSquaredMatricesFromImage(imageToHide, n);
 	MatrixStruct* matricesW = retreiveSquaredMatricesFromImage(watermarkImage, n);
@@ -107,11 +115,13 @@ void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, cha
 	if(k==2 && n==4)
 		steganographyModeToUse = LSB2_MODE;
 
-	hideMatricesInImagesWithLSB(imageShares.ShMatrices, carrierImagesDirectory, steganographyModeToUse, imageShares.ShMatricesAmount/n, n);
+	hideMatricesInImagesWithLSB(imageShares.ShMatrices, carrierImagesDirectory, steganographyModeToUse, imageShares.ShMatricesAmount);
 
 	unsigned char* extraData = getExtraDataFromImage(imageToHide, &BMPFileHeader, &BMPInformationHeader);
 
 	createImageFromMatrices(imageShares.RwMatrices, n, imageShares.RwMatricesAmount, "RW.bmp", &BMPFileHeader, &BMPInformationHeader, extraData);
+
+	return TRUE;
 }
 
 ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, MatrixStruct* matricesW, int n, int k)
@@ -165,34 +175,13 @@ int main(int argc, char* argv[])
 		printMessage();
 		return EXIT_FAILURE;
 	}
-	//distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
-	//distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
-	setSeed(10);
-	MatrixStruct matrix = newZeroMatrixStruct(4,4);
-	for(int i = 0; i < 4; i++){
-	    for(int j = 0; j < 4; j++){
-            do{
-                matrix->matrix[i][j] = nextChar();
-            }while(matrix->matrix[i][j] > 250);
-	    }
-	}
-	printMatrixStruct(matrix);
-	MatrixStruct* m = constructImageShare(matrix, 2, newZeroMatrixStruct(4,4));
-	MatrixStruct* ms = malloc(sizeof(MatrixStruct) * 2);
-	int* nums = malloc(sizeof(int) * 2);
-	for(int i = 0; i < 2; i++)
-    {
-	    ms[i] = m[i+2];
-	    nums[i] = i+3;
-    }
-	printMatrixStruct(recoveryAlgorithm(ms, newZeroMatrixStruct(4,4), nums, 2)[0]);
+	
     Configuration configuration = initializeConfiguration();
     if(argc == 1)
     {
 				printMessage();
 				return EXIT_FAILURE;
     }
-	recoverSecret(argv[1], argv[2], 4, 8, argv[3]);
    	int c;
     while(((c = getopt(argc, argv, "rds:m:k:n:l:"))) != -1)
     {
@@ -205,8 +194,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-										printMessage();
-										return EXIT_FAILURE;
+					printMessage();
+					return EXIT_FAILURE;
                 }
                 break;
             case 'd':
@@ -285,15 +274,27 @@ int main(int argc, char* argv[])
             configuration->isRecovery == 0)
         {
 
-						printMessage();
-						return EXIT_FAILURE;
+			printMessage();
+			return EXIT_FAILURE;
         }
     }
+
+    bool programSuccess;
+
+    if (configuration->isRecovery == 1)
+	{
+		programSuccess = recoverSecret(configuration->secretImage, configuration->watermark, configuration->k, configuration->n, configuration->directory);
+	}
+	else
+	{
+		programSuccess = distributeSecret(configuration->secretImage, configuration->watermark, configuration->k, configuration->n, configuration->directory);
+	}
+
+	return (programSuccess ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 void printMessage()
 {
 	printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
 	printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
-	
 }

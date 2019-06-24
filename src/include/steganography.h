@@ -19,7 +19,7 @@ struct shadowedShare {
 
 typedef struct shadowedShare ShadowedShares;
 
-void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int ShMatricesPerParticipant, int n);
+void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int matricesAmount);
 
 MatrixStruct* selectMatricesToHide(MatrixStruct* matricesToHide, int matricesShareNumber, int n, int ShMatricesPerParticipant);
 

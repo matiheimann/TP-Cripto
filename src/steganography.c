@@ -8,11 +8,13 @@
 #include "steganography.h"
 #include "BMPLibrary.h"
 
-void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int ShMatricesPerParticipant, int n)
+void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolderPath, int steganographyMode, int matricesAmount)
 {
 	DIR* directory;
     struct dirent* directoryFile;
     int imageFilePathLength;
+
+    int currentMatrixToHideIndex = 0;
 
     if ((directory = opendir (imagesFolderPath)) == NULL) 
     {
@@ -20,7 +22,7 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
         return;
     }
 
-    int currentShadowImage = 1;
+    int currentShadowImage = 0;
     while ((directoryFile = readdir(directory))) 
     {
         if (!strcmp (directoryFile->d_name, "."))
@@ -42,19 +44,15 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
 		readBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
 
 		unsigned char* pixelArray;
-		pixelArray = getBitmapArrayFromBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
 
+		pixelArray = getBitmapArrayFromBMPFile(imageFilePath, &BMPFileHeader, &BMPInformationHeader);
 		int pixelArrayLength = BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight*3;
 
 		int currentPixelIndex = 0;
 
-	    int currentMatrixToHideIndex = 0;
-
-		MatrixStruct* currentMatricesToHide = selectMatricesToHide(matricesToHide, currentShadowImage, n, ShMatricesPerParticipant);
-
-		while(currentPixelIndex<pixelArrayLength)
+		while(currentPixelIndex<pixelArrayLength && currentMatrixToHideIndex<matricesAmount)
 		{
-			MatrixStruct currentMatrixToHide = currentMatricesToHide[currentMatrixToHideIndex];
+			MatrixStruct currentMatrixToHide = matricesToHide[currentMatrixToHideIndex];
 
 			for(int i=0; i<currentMatrixToHide->rows; i++)
 			{
@@ -81,7 +79,6 @@ void hideMatricesInImagesWithLSB(MatrixStruct* matricesToHide, char* imagesFolde
 					}
 				}
 			}
-
 			currentMatrixToHideIndex++;
 		}
 
@@ -125,8 +122,8 @@ ShadowedShares retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int ste
 
     MatrixStruct* matricesRetreived = malloc(sizeof(MatrixStruct) * ShMatricesAmount);
     int matricesRetreivedIndex = 0;
-
-    while ((directoryFile = readdir(directory))) 
+    int imagesRead = 0;
+    while ((directoryFile = readdir(directory)) && imagesRead < k) 
     {
         if (!strcmp (directoryFile->d_name, "."))
         	continue;
@@ -177,9 +174,9 @@ ShadowedShares retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int ste
 
 						if(steganographyMode == LSB2_MODE)
 						{
-							SET_BIT(valueToRetreive, 7-currentBit, GET_BIT(pixelArray[currentPixelIndex], 0));
-							currentBit++;
 							SET_BIT(valueToRetreive, 7-currentBit, GET_BIT(pixelArray[currentPixelIndex], 1));
+							currentBit++;
+							SET_BIT(valueToRetreive, 7-currentBit, GET_BIT(pixelArray[currentPixelIndex], 0));
 						}
 
 						currentPixelIndex++;
@@ -199,6 +196,8 @@ ShadowedShares retreiveMatricesFromImagesWithLSB(char* imagesFolderPath, int ste
 			associatedShadowNumbers[matricesRetreivedIndex] = BMPFileHeader.reservedField_1;
 			matricesRetreivedIndex++;
 		}
+
+		imagesRead++;
     }
 
     ShadowedShares shadowedImageShares;

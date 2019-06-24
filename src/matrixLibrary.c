@@ -75,7 +75,7 @@ void freeMatrix(int ** matrix, int rows, int cols)
         free(matrix[i]);
     }
 
-    //free(matrix);
+    free(matrix);
 }
 
 /*          Getters, Setters && Copy    */
