@@ -6,7 +6,7 @@
                
 ### Manual de uso 
 
-> ./ss [-d|-r] -s <imagen> -m <imagen> -k <número> -n <número> -i <directorio>
+> ./ss [-d|-r] -s <imagen> -m <imagen> -k <número> -n <número> -l <directorio>
 
 ## Descripcion
 -d:
@@ -36,7 +36,7 @@
     El número corresponde a la cantidad total de sombras en las que se distribuirá el secreto en un
     esquema (k, n).
 
--i directorio:
+-l directorio:
     El directorio donde se encuentran las imágenes en las que se distribuirá el
     secreto (en el caso de que se haya elegido la opción (-d)), o donde están las imágenes que
     contienen oculto el secreto ( en el caso de que se haya elegido la opción (-r)). Debe contener
@@ -47,11 +47,11 @@
 * Distribuir la imagen “Albert.bmp” con watermark “Paris.bmp” según esquema (4,8)
 guardando las sombras en imágenes del directorio “color280x440”:
 
-> ./ss –d –s Albert.bmp –m Paris.bmp –k 4 – n 8 –i color280x440/
+> ./ss –d –s Albert.bmp –m Paris.bmp –k 4 – n 8 –l color280x440/
 
 
 * Recuperar la imagen “secreto.bmp”, con watermark “RW.bmp” (en el directorio
 color280x440/RW) en un esquema (4,8) buscando imágenes en el directorio
 “color280x440/
 
-> ./ss –r –s secreto.bmp –m color280x440/RW/RW.bmp –k 4 –n 8 –i color280x440/
+> ./ss –r –s secreto.bmp –m color280x440/RW/RW.bmp –k 4 –n 8 –l color280x440/

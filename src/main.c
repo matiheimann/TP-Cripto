@@ -117,7 +117,7 @@ ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, Matr
 	bitmapFileHeader BMPFileHeader;
 	bitmapInformationHeader BMPInformationHeader;
 	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
-  	
+
   	int SmatricesAmount = (BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight)/(n*n);
 
     MatrixStruct* matricesSh = malloc(sizeof(MatrixStruct) * SmatricesAmount * n);
@@ -179,8 +179,8 @@ int main(int argc, char* argv[])
     Configuration configuration = initializeConfiguration();
     if(argc == 1)
     {
-        printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
-        printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+        printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+        printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
         return EXIT_FAILURE;
     }
 	recoverSecret(argv[1], argv[2], 4, 8, argv[3]);
@@ -196,8 +196,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
@@ -208,8 +208,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
@@ -220,8 +220,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
@@ -232,8 +232,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
@@ -244,8 +244,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
@@ -256,8 +256,8 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
@@ -268,14 +268,14 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                    printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                    printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
                     return EXIT_FAILURE;
                 }
                 break;
             default:
-                printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
-                printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+                printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+                printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
                 return EXIT_FAILURE;
         }
 
@@ -283,8 +283,8 @@ int main(int argc, char* argv[])
             strcmp(configuration->watermark, "") == 0 || strcmp(configuration->secretImage, "") == 0 ||
             configuration->isRecovery == 0)
         {
-            printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
-            printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+            printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+            printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
             return EXIT_FAILURE;
         }
     }
