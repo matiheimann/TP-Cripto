@@ -34,10 +34,10 @@ MatrixStruct* generateMatrixListSh(MatrixStruct matrixV, MatrixStruct* matrixLis
     MatrixStruct* ret = malloc(sizeof(MatrixStruct) * n);
 
     for(int i = 0; i < n; i++){
-        ret[i] = newZeroMatrixStruct(n, k+1);
+        ret[i] = newZeroMatrixStruct(n, matrixListG[0]->cols +1);
         for(int j = 0; j < n; j++){
             ret[i]->matrix[j][0] = matrixV->matrix[j][i];
-            for(int w = 0; w < k; w++){
+            for(int w = 0; w < (n/k); w++){
                 ret[i]->matrix[j][w+1] = matrixListG[i]->matrix[j][w];
             }
         }
@@ -57,17 +57,22 @@ MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k) {
     int n = matrixR->rows;
     MatrixStruct* ret = malloc(sizeof(MatrixStruct) * n);
     for(int i = 1; i <= n; i++){
-        ret[i-1] = newZeroMatrixStruct(n, k);
+        ret[i-1] = newZeroMatrixStruct(n, n/k);
         for(int j = 0; j < n; j++){
-            for(int w = 0; w < k; w++){
-                int g = 0;
-                for(int y = 0; y < n/k - 1; y++){
-                    g += matrixR->matrix[j][w * n/k + y];
-                    g = g%251;
+            for(int w = 0; w < n/k; w++)
+            {
+                for(int y = 0; y < k; y++)
+                {
+                    if(y != k-1) {
+                        ret[i - 1]->matrix[j][w] += matrixR->matrix[j][w*k + y];
+                        ret[i - 1]->matrix[j][w] = ret[i - 1]->matrix[j][w] % 251;
+                    }
+                    else
+                    {
+                        ret[i - 1]->matrix[j][w] += (matrixR->matrix[j][w*k + y]*i);
+                        ret[i - 1]->matrix[j][w] = ret[i - 1]->matrix[j][w] % 251;
+                    }
                 }
-                g += matrixR->matrix[j][(w+1) * n/k - 1] * i;
-                g = g%251;
-                ret[i-1]->matrix[j][w] = g;
             }
         }
     }

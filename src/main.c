@@ -10,6 +10,7 @@
 #include "include/matrixStruct.h"
 #include "include/secretSharing.h"
 #include "include/steganography.h"
+#include "include/utils.h"
 
 void distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
 
@@ -112,7 +113,6 @@ ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, Matr
 
 int main(int argc, char* argv[])
 {
-
 	//distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
 	distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
     Configuration configuration = initializeConfiguration();
@@ -206,8 +206,8 @@ int main(int argc, char* argv[])
                 }
                 break;
             default:
-                printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                printf("In case of recovery: ./project -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+                printf("In case of distribution: ./project -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
                 return EXIT_FAILURE;
         }
     }
