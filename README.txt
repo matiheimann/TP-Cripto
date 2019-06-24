@@ -7,7 +7,7 @@
 ### Manual de uso 
 
 ```bash
-$ ./ss [-d|-r] -s <imagen> -m <imagen> -k <número> -n <número> -dir <directorio>
+$ ./ss [-d|-r] -s <imagen> -m <imagen> -k <número> -n <número> -i <directorio>
 ```
 
 ## Descripcion
@@ -34,7 +34,7 @@ recuperar el secreto en un esquema (k, n)
 **-n _número_**: El _número_ corresponde a la cantidad total de sombras en las que se distribuirá
 el secreto en un esquema (k, n).
 
-**-dir _directorio_**: El _directorio_ donde se encuentran las imágenes en las que se distribuirá el
+**-i _directorio_**: El _directorio_ donde se encuentran las imágenes en las que se distribuirá el
 secreto (en el caso de que se haya elegido la opción (-d)), o donde están las imágenes que
 contienen oculto el secreto ( en el caso de que se haya elegido la opción (-r)). Debe contener
 imágenes de extensión .bmp, de 24 bits por pixel.
@@ -44,13 +44,13 @@ imágenes de extensión .bmp, de 24 bits por pixel.
 guardando las sombras en imágenes del directorio “color280x440”:
 
 ```bash
-./ss –d –s Albert.bmp –m Paris.bmp –k 4 – n 8 –dir color280x440/
+./ss –d –s Albert.bmp –m Paris.bmp –k 4 – n 8 –i color280x440/
 ```
 
 * Recuperar la imagen “secreto.bmp”, con watermark “RW.bmp” (en el directorio
 color280x440/RW) en un esquema (4,8) buscando imágenes en el directorio
 “color280x440/
 ```bash
-./ss –r –s secreto.bmp –m color280x440/RW/RW.bmp –k 4 –n 8 –dir color280x440/
+./ss –r –s secreto.bmp –m color280x440/RW/RW.bmp –k 4 –n 8 –i color280x440/
 ```
     
