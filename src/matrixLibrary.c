@@ -3,6 +3,30 @@
 #include "include/matrixLibrary.h"
 #include "include/libraryMod251.h"
 
+void multiplyRow(int ** matrix, int n1, int m1, int rowIndex, int num)
+{
+    for (int j = 0; j < m1; j++)
+    {
+        matrix[rowIndex][j] = producto_mod251(matrix[rowIndex][j], num);
+    }
+}
+
+void divideRow(int ** matrix, int n, int m,int rowIndex, int num)
+{
+    for (int j = 0; j < m; j++)
+    {
+        matrix[rowIndex][j] = dividir_mod251(matrix[rowIndex][j], num);
+    }
+}
+
+void subtractRow(int ** matrix, int n1, int m1, int rowIndexChanged, int rowIndex)
+{
+    for (int j = 0; j < m1; j++)
+    {
+        matrix[rowIndexChanged][j] = mod251(resta_mod251(matrix[rowIndexChanged][j], matrix[rowIndex][j]));
+    }
+
+}
 
 /*          Creation of Matrix          */
 int ** newMatrix(int rows, int cols)
@@ -272,30 +296,7 @@ void multiply_matrix(int ** matrix1, int rows1, int cols1, int ** matrix2, int r
 
 /*          Operaciones de Filas        */
 
-void multiplyRow(int ** matrix, int n1, int m1, int rowIndex, int num)
-{
-    for (int j = 0; j < m1; j++)
-    {
-        matrix[rowIndex][j] = producto_mod251(matrix[rowIndex][j], num);
-    }
-}
 
-void divideRow(int ** matrix, int n, int m,int rowIndex, int num)
-{
-    for (int j = 0; j < m; j++)
-    {
-        matrix[rowIndex][j] = dividir_mod251(matrix[rowIndex][j], num);
-    }
-}
-
-void subtractRow(int ** matrix, int n1, int m1, int rowIndexChanged, int rowIndex)
-{
-    for (int j = 0; j < m1; j++)
-    {
-        matrix[rowIndexChanged][j] = mod251(resta_mod251(matrix[rowIndexChanged][j], matrix[rowIndex][j]));
-    }
-
-}
 
 void swapInNonZeroRow(int ** matrix, int n1,int m1, int rowIndex)
 {

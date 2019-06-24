@@ -39,12 +39,14 @@ MatrixStruct recoverMatrixR(MatrixStruct* matrixG, int* shadowNumber, int size)
     int val = matrixG[0]->rows/matrixG[0]->cols;
     MatrixStruct matrixAux = newZeroMatrixStruct(val, val + 1);
     MatrixStruct matrixR = newZeroMatrixStruct(matrixG[0]->rows, matrixG[0]->rows);
-
     for(int i = 0; i < val; i++)
     {
+        int pot = 1;
         for(int j = 0; j < val; j++)
         {
-            matrixAux->matrix[i][j] = (j == val - 1) ? shadowNumber[i] : 1;
+            matrixAux->matrix[i][j] = pot;
+            pot = pot * shadowNumber[i];
+            pot = pot % 251;
         }
     }
     for(int i = 0; i < matrixG[0]->rows; i++)
@@ -55,16 +57,14 @@ MatrixStruct recoverMatrixR(MatrixStruct* matrixG, int* shadowNumber, int size)
             {
                 matrixAux->matrix[k][val] = matrixG[k]->matrix[i][j];
             }
-            printMatrixStruct(matrixAux);
             int * ans = malloc(sizeof(int) * val);
             if(solveMatrixStruct(matrixAux, ans))
             {
                 for(int k = 0; k < val; k++)
                 {
                     matrixR->matrix[i][j * val + k] = ans[k];
-                    printf("%d ", ans[k]);
                 }
-                printf("\n");
+
             }
             else
             {

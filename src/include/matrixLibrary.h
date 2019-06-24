@@ -55,4 +55,5 @@ int** substractWithoutModule(int** m1, int** m2, int rows, int cols);
 int** addMatrixWithoutModule(int** m1, int** m2, int rows, int cols);
 
 
+
 #endif //MATRICES_RESOLVER_MATRIXLIBRARY_H

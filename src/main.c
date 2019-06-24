@@ -166,6 +166,7 @@ int main(int argc, char* argv[])
             }while(matrix->matrix[i][j] > 250);
 	    }
 	}
+	printMatrixStruct(matrix);
 	MatrixStruct* m = constructImageShare(matrix, 4, newZeroMatrixStruct(8,8));
 	MatrixStruct* ms = malloc(sizeof(MatrixStruct) * 4);
 	int* nums = malloc(sizeof(int) * 4);
@@ -174,7 +175,7 @@ int main(int argc, char* argv[])
 	    ms[i] = m[i];
 	    nums[i] = i+1;
     }
-	recoveryAlgorithm(ms, newZeroMatrixStruct(8,8), nums, 4);
+	printMatrixStruct(recoveryAlgorithm(ms, newZeroMatrixStruct(8,8), nums, 4)[0]);
     Configuration configuration = initializeConfiguration();
     if(argc == 1)
     {

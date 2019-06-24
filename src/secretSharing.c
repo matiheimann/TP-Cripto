@@ -61,19 +61,13 @@ MatrixStruct* generateMatrixListG(MatrixStruct matrixR, int k) {
         for(int j = 0; j < n; j++){
             for(int w = 0; w < n/k; w++)
             {
+                int pot = 1;
                 for(int y = 0; y < k; y++)
                 {
-                    if(y != k-1) {
-                        ret[i - 1]->matrix[j][w] += matrixR->matrix[j][w*k + y];
+                        ret[i - 1]->matrix[j][w] += matrixR->matrix[j][w*k + y] * pot;
                         ret[i - 1]->matrix[j][w] = ret[i - 1]->matrix[j][w] % 251;
-                        printf("%d + ", matrixR->matrix[j][w*k + y]);
-                    }
-                    else
-                    {
-                        ret[i - 1]->matrix[j][w] += (matrixR->matrix[j][w*k + y])*i;
-                        ret[i - 1]->matrix[j][w] = ret[i - 1]->matrix[j][w] % 251;
-                        printf("%d * %d\n", matrixR->matrix[j][w*k + y], i);
-                    }
+                        pot *= i;
+                        pot = pot % 251;
                 }
             }
         }
