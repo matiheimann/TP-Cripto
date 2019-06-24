@@ -157,6 +157,24 @@ int main(int argc, char* argv[])
 {
 	//distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory);
 	//distributeSecret(argv[1], argv[2], 4, 8, argv[3]);
+	setSeed(10);
+	MatrixStruct matrix = newZeroMatrixStruct(8,8);
+	for(int i = 0; i < 8; i++){
+	    for(int j = 0; j < 8; j++){
+            do{
+                matrix->matrix[i][j] = nextChar();
+            }while(matrix->matrix[i][j] > 250);
+	    }
+	}
+	MatrixStruct* m = constructImageShare(matrix, 4, newZeroMatrixStruct(8,8));
+	MatrixStruct* ms = malloc(sizeof(MatrixStruct) * 4);
+	int* nums = malloc(sizeof(int) * 4);
+	for(int i = 0; i < 4; i++)
+    {
+	    ms[i] = m[i];
+	    nums[i] = i+1;
+    }
+	recoveryAlgorithm(ms, newZeroMatrixStruct(8,8), nums, 4);
     Configuration configuration = initializeConfiguration();
     if(argc == 1)
     {

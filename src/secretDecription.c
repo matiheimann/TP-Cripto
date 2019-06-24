@@ -53,16 +53,18 @@ MatrixStruct recoverMatrixR(MatrixStruct* matrixG, int* shadowNumber, int size)
         {
             for(int k = 0; k < size; k++)
             {
-                matrixAux->matrix[k][matrixG[0]->cols] = matrixG[k]->matrix[i][j];
+                matrixAux->matrix[k][val] = matrixG[k]->matrix[i][j];
             }
-            int val = matrixG[0]->rows/matrixG[0]->cols;
+            printMatrixStruct(matrixAux);
             int * ans = malloc(sizeof(int) * val);
             if(solveMatrixStruct(matrixAux, ans))
             {
                 for(int k = 0; k < val; k++)
                 {
                     matrixR->matrix[i][j * val + k] = ans[k];
+                    printf("%d ", ans[k]);
                 }
+                printf("\n");
             }
             else
             {
