@@ -4,8 +4,10 @@ cmake-build-debug
 
 CMakeLists.txt
 
+
 *.o
 
 project
 
 ss
+

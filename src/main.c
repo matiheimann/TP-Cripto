@@ -117,7 +117,7 @@ ImageShares retreiveImageShares(char* imageToHide, MatrixStruct* matricesS, Matr
 	bitmapFileHeader BMPFileHeader;
 	bitmapInformationHeader BMPInformationHeader;
 	readBMPFile(imageToHide, &BMPFileHeader, &BMPInformationHeader);
-  	
+
   	int SmatricesAmount = (BMPInformationHeader.bitmapWidth*BMPInformationHeader.bitmapHeight)/(n*n);
 
     MatrixStruct* matricesSh = malloc(sizeof(MatrixStruct) * SmatricesAmount * n);
@@ -274,8 +274,8 @@ int main(int argc, char* argv[])
                 }
                 break;
             default:
-                printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-                printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+                printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+                printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
                 return EXIT_FAILURE;
         }
 
@@ -283,8 +283,8 @@ int main(int argc, char* argv[])
             strcmp(configuration->watermark, "") == 0 || strcmp(configuration->secretImage, "") == 0 ||
             configuration->isRecovery == 0)
         {
-            printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
-            printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]");
+            printf("In case of recovery: ./ss -r -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
+            printf("In case of distribution: ./ss -d -s [secret image path] -m [watermark image path] -k [k number] -n [n number] -l [directory where images are]\n");
             return EXIT_FAILURE;
         }
     }
