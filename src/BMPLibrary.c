@@ -123,10 +123,9 @@ int writeBMPFile(char* filePath, bitmapFileHeader* fileHeader, bitmapInformation
         return -1;
     }
 
-    //fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
     if(extraData != NULL)
     {
-        if(fwrite(extraData, fileHeader->offsetBitsFromHeaderToBitmap - sizeof(bitmapInformationHeader) - sizeof(bitmapFileHeader), 1, filePointer) != 1)
+        if(fwrite(extraData, fileHeader->fileOffset - sizeof(bitmapInformationHeader) - sizeof(bitmapFileHeader), 1, filePointer) != 1)
         {
             printf("Error writing information header\n");
             fclose(filePointer);
@@ -152,7 +151,7 @@ void printBMPFileHeader(bitmapFileHeader* fileHeaderToPrint)
     printf("File size -> %u \n", fileHeaderToPrint->fileSize);
     printf("Reserved field 1 -> %hi \n", fileHeaderToPrint->reservedField_1);
     printf("Reserved field 2 -> %hi \n", fileHeaderToPrint->reservedField_2);
-    printf("Offset bits -> %u \n", fileHeaderToPrint->offsetBitsFromHeaderToBitmap);
+    printf("Offset bits -> %u \n", fileHeaderToPrint->fileOffset);
 }
 
 void printBMPInformationHeader(bitmapInformationHeader* informationHeaderToPrint)
@@ -194,7 +193,7 @@ unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHe
         return NULL;
     }
 
-    fseek(filePointer, fileHeader->offsetBitsFromHeaderToBitmap, SEEK_SET);
+    fseek(filePointer, fileHeader->fileOffset, SEEK_SET);
     fread(bitmapImageData, (BMPInfoHeader->bitsPerPixel/8) * BMPInfoHeader->bitmapWidth * BMPInfoHeader->bitmapHeight, 1, filePointer);
 
     if (bitmapImageData == NULL)
@@ -210,7 +209,7 @@ unsigned char* getBitmapArrayFromBMPFile(char* BMPFile, bitmapFileHeader* fileHe
 
 unsigned char* getExtraDataFromImage(char* BMPFile, bitmapFileHeader* fileHeader, bitmapInformationHeader* BMPInfoHeader)
 {
-    int extraDataLength = fileHeader->offsetBitsFromHeaderToBitmap - sizeof(bitmapFileHeader) - sizeof(bitmapInformationHeader);
+    int extraDataLength = fileHeader->fileOffset - sizeof(bitmapFileHeader) - sizeof(bitmapInformationHeader);
 
     if(extraDataLength <= 0)
         return NULL;

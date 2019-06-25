@@ -7,6 +7,4 @@
 
 int isNaturalNumber(char* num);
 
-int is_regular_file(const char *path);
-
 #endif //TP_CRIPTO_UTILS_H

@@ -14,7 +14,7 @@ typedef struct bitmapFileHeaderStruct
     unsigned int fileSize;
     unsigned short reservedField_1;
     unsigned short reservedField_2;
-    unsigned int offsetBitsFromHeaderToBitmap;
+    unsigned int fileOffset;
 } bitmapFileHeader;
 
 typedef struct bitmapInformationHeaderStruct

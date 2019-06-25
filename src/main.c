@@ -88,20 +88,8 @@ bool recoverSecret(char* newImageFilePath, char* RwImage, int k, int n, char* ca
 
 bool distributeSecret(char* imageToHide, char* watermarkImage, int k, int n, char* carrierImagesDirectory)
 {
-	if (!is_regular_file(imageToHide))
-	{
-		printf("Error - Image to hide is not a file\n");
-		return FALSE;
-	}
-
 	if(validateImageToHide(imageToHide, n) == 0)
 		return FALSE;
-
-	if (!is_regular_file(watermarkImage))
-	{
-		printf("Error - Watermark image is not a file\n");
-		return FALSE;
-	}
 
 	if(validateWatermarkImage(imageToHide, watermarkImage) == 0)
 		return FALSE;
